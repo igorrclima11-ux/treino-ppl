@@ -167,8 +167,7 @@ textarea{width:100%;background:#0D0D15;border:1px solid #1E1E2E;border-radius:12
       </div>
     </div>
   </div>
-</div>
-<script>
+</div><script>
 const MONTHS_PT=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const DAYS_PT=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 const DEFAULT_PLAN={
@@ -283,11 +282,7 @@ function adjustWeight(id,delta){
   weights[id]=Math.max(0,+(weights[id]||0)+delta);
   const inp=document.getElementById('w_'+id);if(inp)inp.value=weights[id];
 }
-function onWeightChange(id,val){weights[id]=parseFloat(val)||0;}
-  **PARTE 3 de 4 — Cole logo abaixo da parte 2:**
-
-```javascript
-function renderHome(){
+function onWeightChange(id,val){weights[id]=parseFloat(val)||0;}function renderHome(){
   const ac=plan[currentDay]?.color||'#00E5FF';
   document.getElementById('accent-dot').style.color=ac;
   document.getElementById('edit-btn').style.borderColor=ac+'55';
@@ -417,8 +412,7 @@ function renderLog(){
     const noteRow=log.notes?`<div style="margin-top:8px;font-size:11px;color:#555;font-style:italic">"${log.notes}"</div>`:'';
     return `<div class="log-card" style="border:1px solid ${c}22"><div style="background:${c}15;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${c}22"><div><span style="font-family:'Syne',sans-serif;font-weight:800;color:${c};font-size:15px">${log.day}</span><span style="font-size:11px;color:#666;margin-left:8px">${dp?.sub||''}</span></div><div style="font-size:11px;color:#555">${fmtDate(log.date)}</div></div><div style="padding:10px 16px">${exRows}${cardioRow}${noteRow}</div></div>`;
   }).join('');
-}
-function setReportTab(t){
+}function setReportTab(t){
   reportTab=t;
   ['week','month','year'].forEach(rt=>{
     const btn=document.getElementById('rtab-'+rt);
