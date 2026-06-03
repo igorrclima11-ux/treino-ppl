@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="FORGE"/>
-<meta name="theme-color" uicontent="#0A0A0F"/>
+<meta name="theme-color" content="#0A0A0F"/>
 <title>FORGE</title>
 <style>
 /* ── RESET & BASE ── */
@@ -564,6 +564,31 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
   </div>
 </div>
 
+<!-- MODAL: ADD TEMP EXERCISE -->
+<div class="modal-bg" id="temp-ex-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px">Adicionar Exercicio</div>
+      <button class="xbtn" id="btn-close-temp-ex">X</button>
+    </div>
+    <div style="font-size:10px;color:#555;margin-bottom:14px;line-height:1.5">Este exercicio sera adicionado apenas ao treino de hoje. Nao altera a categoria base.</div>
+    <div id="temp-ex-list"></div>
+  </div>
+</div>
+
+<!-- MODAL: REMOVE SESSION EXERCISE CONFIRM -->
+<div class="conf-bg" id="sess-remove-modal">
+  <div style="background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid #FF3D71;border-radius:16px;padding:24px 18px;width:100%;max-width:310px">
+    <div style="font-weight:800;font-size:16px;margin-bottom:7px">Remover do treino?</div>
+    <div style="font-size:11px;color:#888;margin-bottom:6px"><span id="sess-remove-name" style="color:#FF3D71;font-weight:700"></span></div>
+    <div style="font-size:10px;color:#555;margin-bottom:18px;line-height:1.5">Remove apenas do treino de hoje. A categoria base nao e alterada.</div>
+    <div style="display:flex;gap:8px">
+      <button id="btn-cancel-sess-remove" style="flex:1;padding:11px;border-radius:9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#888;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">CANCELAR</button>
+      <button id="btn-confirm-sess-remove" style="flex:1;padding:11px;border-radius:9px;background:rgba(255,61,113,0.1);border:1px solid #FF3D71;color:#FF3D71;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">REMOVER</button>
+    </div>
+  </div>
+</div>
+
 <div class="conf-bg" id="summary-modal">
   <div id="summary-card" style="background:linear-gradient(145deg,#131320,#0F0F1A);border-radius:20px;padding:26px 22px;width:100%;max-width:340px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 24px 48px rgba(0,0,0,0.6)">
     <div id="summary-content"></div>
@@ -737,6 +762,8 @@ var curTheme=gls("t5_theme","default");
 // Notifications config: {enabled, hour, min}
 var notifCfg=gls("t5_notif",{enabled:false,hour:7,min:0});
 var sessData={};
+var sessExercises=null; // the day's editable exercise list (copy of category)
+var pendingSessRemove=null;
 var curCatId=null;
 var gymOn=false;
 var sessTimerIv=null;
@@ -846,7 +873,7 @@ function renderChips(){
       c.style.background=curCatId===cat.id?cat.color+"22":"#111";
       c.style.color=curCatId===cat.id?cat.color:"#666";
       c.style.borderColor=curCatId===cat.id?cat.color:"#222";
-      c.onclick=function(){curCatId=cat.id;sessData={};renderChips();showWorkout();};
+      c.onclick=function(){curCatId=cat.id;sessData={};sessExercises=null;renderChips();showWorkout();};
       el.appendChild(c);
     })(cats[i]);
   }
@@ -858,14 +885,128 @@ function renderChips(){
   if(curCatId)showWorkout();
 }
 
+function moveSessEx(idx, dir){
+  if(!sessExercises) return;
+  var ni = idx + dir;
+  if(ni < 0 || ni >= sessExercises.length) return;
+  var tmp = sessExercises[idx];
+  sessExercises[idx] = sessExercises[ni];
+  sessExercises[ni] = tmp;
+  showWorkout();
+}
+
+function removeSessEx(idx){
+  if(!sessExercises || idx<0 || idx>=sessExercises.length) return;
+  var ex = sessExercises[idx];
+  // Confirm removal
+  pendingSessRemove = idx;
+  var modal = document.getElementById("sess-remove-modal");
+  var nameEl = document.getElementById("sess-remove-name");
+  if(nameEl) nameEl.textContent = ex.name;
+  if(modal) modal.className = "conf-bg show";
+}
+
+function confirmRemoveSessEx(){
+  if(pendingSessRemove===null) return;
+  var ex = sessExercises[pendingSessRemove];
+  if(ex && sessData[ex.id]) delete sessData[ex.id];
+  sessExercises.splice(pendingSessRemove, 1);
+  pendingSessRemove = null;
+  document.getElementById("sess-remove-modal").className="conf-bg";
+  showWorkout();
+}
+
+function openAddTempEx(){
+  var cat = gC(curCatId);
+  if(!cat) return;
+  // Populate library list grouped by muscle
+  var listEl = document.getElementById("temp-ex-list");
+  if(!listEl) return;
+  listEl.innerHTML = "";
+  // Custom exercise input
+  var customWrap = document.createElement("div");
+  customWrap.style.cssText = "margin-bottom:12px";
+  customWrap.innerHTML = "<div class='slabel'>CRIAR NOVO</div>";
+  var customRow = document.createElement("div");
+  customRow.style.cssText = "display:flex;gap:6px";
+  var customInp = document.createElement("input");
+  customInp.id = "temp-ex-custom";
+  customInp.className = "search-inp";
+  customInp.placeholder = "Nome do exercicio...";
+  customInp.style.marginBottom = "0";
+  var customBtn = document.createElement("button");
+  customBtn.className = "xbtn";
+  customBtn.style.cssText = "background:"+cat.color+"22;border-color:"+cat.color+"44;color:"+cat.color+";white-space:nowrap;padding:0 14px";
+  customBtn.textContent = "Adicionar";
+  customBtn.onclick = function(){
+    var nm = customInp.value.trim();
+    if(!nm) return;
+    addTempExToSession(nm);
+  };
+  customRow.appendChild(customInp);customRow.appendChild(customBtn);
+  customWrap.appendChild(customRow);
+  listEl.appendChild(customWrap);
+
+  // Library list
+  var libLabel = document.createElement("div");
+  libLabel.className = "slabel";
+  libLabel.textContent = "DA BIBLIOTECA";
+  listEl.appendChild(libLabel);
+
+  var groups = {};
+  for(var i=0;i<lib.length;i++){
+    var g = lib[i].muscle||"Outros";
+    if(!groups[g]) groups[g]=[];
+    groups[g].push(lib[i]);
+  }
+  for(var gName in groups){
+    var gHdr = document.createElement("div");
+    gHdr.style.cssText = "font-size:9px;color:#444;font-weight:700;letter-spacing:1px;margin:10px 0 5px";
+    gHdr.textContent = gName.toUpperCase();
+    listEl.appendChild(gHdr);
+    for(var j=0;j<groups[gName].length;j++){
+      (function(exName){
+        var item = document.createElement("button");
+        item.style.cssText = "width:100%;text-align:left;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:9px;padding:10px 13px;margin-bottom:5px;color:#CCC;font-size:12px;cursor:pointer;font-family:inherit";
+        item.textContent = exName;
+        item.onclick = function(){addTempExToSession(exName);};
+        listEl.appendChild(item);
+      })(groups[gName][j].name);
+    }
+  }
+  document.getElementById("temp-ex-modal").className = "modal-bg show";
+}
+
+function addTempExToSession(name){
+  if(!sessExercises) sessExercises=[];
+  // Create temp exercise with unique id
+  var tempId = "temp_" + Date.now();
+  sessExercises.push({id:tempId, name:name, sets:3, reps:10, dw:0, temp:true});
+  document.getElementById("temp-ex-modal").className = "modal-bg";
+  showWorkout();
+  // Scroll to bottom to show new exercise
+  setTimeout(function(){
+    var ws=document.getElementById("workout-section");
+    if(ws) ws.scrollIntoView({behavior:"smooth",block:"end"});
+  }, 100);
+}
+
 function showWorkout(){
   var cat=gC(curCatId);
   var ws=document.getElementById("workout-section");
   if(!cat){ws.style.display="none";return;}
+  // Initialize sessExercises as copy of category if not yet set
+  if(sessExercises===null){
+    sessExercises=[];
+    for(var ci=0;ci<cat.exercises.length;ci++){
+      var ce=cat.exercises[ci];
+      sessExercises.push({id:ce.id,name:ce.name,sets:ce.sets,reps:ce.reps,dw:ce.dw,temp:false});
+    }
+  }
   var last=null;
   for(var i=logs.length-1;i>=0;i--){if(logs[i].catId===cat.id&&logs[i].sets){last=logs[i];break;}}
-  for(var j=0;j<cat.exercises.length;j++){
-    var ex=cat.exercises[j];
+  for(var j=0;j<sessExercises.length;j++){
+    var ex=sessExercises[j];
     if(sessData[ex.id])continue;
     var arr=[],ns=ex.sets||3;
     for(var s=0;s<ns;s++){
@@ -878,9 +1019,8 @@ function showWorkout(){
   ws.innerHTML="";ws.style.display="block";
   var hdr=document.createElement("div");
   hdr.style.cssText="background:"+cat.color+"18;border:1px solid "+cat.color+"33;border-radius:11px;padding:10px 13px;margin-bottom:8px";
-  // Left: name + count. Right: session timer
   var hdrLeft=document.createElement("div");
-  hdrLeft.innerHTML="<div style='font-weight:800;font-size:15px;color:"+cat.color+"'>"+cat.name+"</div><div style='font-size:9px;color:#666;margin-top:1px'>"+cat.exercises.length+" exercicios</div>";
+  hdrLeft.innerHTML="<div style='font-weight:800;font-size:15px;color:"+cat.color+"'>"+cat.name+"</div><div style='font-size:9px;color:#666;margin-top:1px'>"+sessExercises.length+" exercicios</div>";
   var hdrRight=document.createElement("div");
   hdrRight.style.cssText="text-align:right;flex-shrink:0";
   hdrRight.innerHTML="<div style='font-size:8px;color:#555;letter-spacing:1px'>SESSAO</div><div id='sess-timer' style='font-size:13px;font-weight:700;color:#666'>00:00</div>";
@@ -888,16 +1028,55 @@ function showWorkout(){
   hdr.appendChild(hdrLeft);hdr.appendChild(hdrRight);
   ws.appendChild(hdr);
   updSessTimer();
-  for(var k=0;k<cat.exercises.length;k++){
-    ws.appendChild(mkExCard(cat.exercises[k],cat.color));
-    updDots(cat.exercises[k].id);
-    updCurRow(cat.exercises[k].id);
+  for(var k=0;k<sessExercises.length;k++){
+    ws.appendChild(mkExCard(sessExercises[k],cat.color,k));
+    updDots(sessExercises[k].id);
+    updCurRow(sessExercises[k].id);
   }
+  // Add exercise button at the end
+  var addBtn=document.createElement("button");
+  addBtn.style.cssText="width:100%;padding:13px;border-radius:12px;background:rgba(255,255,255,0.04);border:1.5px dashed "+cat.color+"55;color:"+cat.color+";font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;margin-bottom:8px";
+  addBtn.textContent="+ Adicionar exercicio ao treino";
+  addBtn.onclick=function(){openAddTempEx();};
+  ws.appendChild(addBtn);
 }
 
-function mkExCard(ex,ac){
+function mkExCard(ex,ac,exIdx){
   var ns=sessData[ex.id]?sessData[ex.id].length:(ex.sets||3);
   var card=document.createElement("div");card.className="ex-card";card.id="exc_"+ex.id;
+  // Reorder/remove toolbar
+  var toolbar=document.createElement("div");
+  toolbar.style.cssText="display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(0,0,0,0.25);border-bottom:1px solid rgba(255,255,255,0.04)";
+  var ctrlLeft=document.createElement("div");
+  ctrlLeft.style.cssText="display:flex;gap:4px;align-items:center";
+  // Up button
+  var upBtn=document.createElement("button");
+  upBtn.className="sbtn";upBtn.style.cssText="width:28px;height:28px;font-size:13px";upBtn.innerHTML="&#8593;";
+  if(exIdx===0){upBtn.style.opacity="0.25";}
+  // Down button
+  var dnBtn=document.createElement("button");
+  dnBtn.className="sbtn";dnBtn.style.cssText="width:28px;height:28px;font-size:13px";dnBtn.innerHTML="&#8595;";
+  if(sessExercises&&exIdx===sessExercises.length-1){dnBtn.style.opacity="0.25";}
+  (function(idx){
+    upBtn.onclick=function(){moveSessEx(idx,-1);};
+    dnBtn.onclick=function(){moveSessEx(idx,1);};
+  })(exIdx);
+  ctrlLeft.appendChild(upBtn);ctrlLeft.appendChild(dnBtn);
+  // Temp badge + remove
+  var ctrlRight=document.createElement("div");
+  ctrlRight.style.cssText="display:flex;gap:5px;align-items:center";
+  if(ex.temp){
+    var tempBadge=document.createElement("span");
+    tempBadge.style.cssText="font-size:8px;color:"+ac+";background:"+ac+"22;border:1px solid "+ac+"44;border-radius:5px;padding:2px 6px;font-weight:700;letter-spacing:0.5px";
+    tempBadge.textContent="TEMP";
+    ctrlRight.appendChild(tempBadge);
+  }
+  var rmBtn=document.createElement("button");
+  rmBtn.className="sbtn";rmBtn.style.cssText="width:28px;height:28px;font-size:14px;border-color:rgba(255,61,113,0.3);color:#FF3D71";rmBtn.innerHTML="&#215;";
+  (function(idx){rmBtn.onclick=function(){removeSessEx(idx);};})(exIdx);
+  ctrlRight.appendChild(rmBtn);
+  toolbar.appendChild(ctrlLeft);toolbar.appendChild(ctrlRight);
+  card.appendChild(toolbar);
   var hdr=document.createElement("div");hdr.className="ex-card-hdr";
   var nd=document.createElement("div");nd.style.flex="1";
   nd.innerHTML="<div style='font-size:11px;color:#E8E8F0;font-weight:700'>"+ex.name+"</div><div style='font-size:9px;color:#555;margin-top:2px'>"+ns+" series x "+(ex.reps||10)+" reps alvo</div>";
@@ -1097,8 +1276,10 @@ function saveTreino(){
   if(gymOn){
     var cat=gC(curCatId);if(!cat){alert("Selecione uma categoria.");return;}
     var sd={};
-    for(var j=0;j<cat.exercises.length;j++){
-      var ex=cat.exercises[j];var ns=sessData[ex.id]?sessData[ex.id].length:(ex.sets||3);var arr=[];
+    var exList = sessExercises || cat.exercises;
+    var exMeta = {}; // store temp exercise names for report
+    for(var j=0;j<exList.length;j++){
+      var ex=exList[j];var ns=sessData[ex.id]?sessData[ex.id].length:(ex.sets||3);var arr=[];
       for(var s=0;s<ns;s++){
         var wi=document.getElementById("sw_"+ex.id+"_"+s);
         var ri=document.getElementById("sr2_"+ex.id+"_"+s);
@@ -1108,13 +1289,16 @@ function saveTreino(){
         arr.push({weight:wd,reps:rd,done:dn});
       }
       sd[ex.id]=arr;
+      // Store name + temp flag for exercises (needed for temp exercises in reports)
+      exMeta[ex.id]={name:ex.name,temp:ex.temp||false,reps:ex.reps,sets:ex.sets};
     }
-    logs.push({id:Date.now(),date:dt,catId:cat.id,catName:cat.name,catColor:cat.color,sets:sd,notes:document.getElementById("notes").value,duration:sessTimerSec});
+    logs.push({id:Date.now(),date:dt,catId:cat.id,catName:cat.name,catColor:cat.color,sets:sd,exMeta:exMeta,notes:document.getElementById("notes").value,duration:sessTimerSec});
     sls("t5_logs",logs);
   }
   if(cardioOn){clogs.push({id:Date.now()+1,date:dt,catId:curCatId||"cardio",type:cType,duration:cDur,intensity:cInt});sls("t5_cardio",clogs);}
   document.getElementById("notes").value="";
   stopSessTimer();
+  sessExercises=null; // reset to category base for next session
   renderDashboard();
   // Auto backup
   setTimeout(function(){gdAutoBackup();}, 2000);
@@ -1177,37 +1361,38 @@ function showSummary(log, cardioEntry){
 
   // Exercise list - best weight + reps of last completed set
   if(log&&log.sets){
-    var cat2=gC(log.catId);
-    if(cat2){
-      var exListDiv=document.createElement("div");
-      exListDiv.style.cssText="background:rgba(255,255,255,0.03);border-radius:12px;padding:6px 12px;border:1px solid rgba(255,255,255,0.06)";
-      var shown=0;
-      for(var i=0;i<cat2.exercises.length;i++){
-        var ex2=cat2.exercises[i];
-        var exSets2=log.sets[ex2.id]||[];
-        var bestW=0;
-        for(var s=0;s<exSets2.length;s++){if(exSets2[s].weight>bestW)bestW=exSets2[s].weight;}
-        if(bestW===0)continue;
-        // Reps of last set with best weight
-        var lastReps=0;
-        for(var s=exSets2.length-1;s>=0;s--){
-          if(exSets2[s].weight===bestW){lastReps=exSets2[s].reps||0;break;}
-        }
-        var exRow=document.createElement("div");
-        exRow.style.cssText="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)";
-        if(i===cat2.exercises.length-1)exRow.style.borderBottom="none";
-        var exName=document.createElement("div");
-        exName.style.cssText="font-size:11px;color:#888;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis";
-        exName.textContent=ex2.name;
-        var exVal=document.createElement("div");
-        exVal.style.cssText="font-size:11px;font-weight:700;color:"+col+";flex-shrink:0;margin-left:8px";
-        exVal.textContent=bestW+"kg x"+lastReps;
-        exRow.appendChild(exName);exRow.appendChild(exVal);
-        exListDiv.appendChild(exRow);
-        shown++;
-      }
-      if(shown>0) el.appendChild(exListDiv);
+    var exListDiv=document.createElement("div");
+    exListDiv.style.cssText="background:rgba(255,255,255,0.03);border-radius:12px;padding:6px 12px;border:1px solid rgba(255,255,255,0.06)";
+    var shown=0;
+    // Build ordered list of exercise IDs from log.sets
+    var exIds=[];
+    for(var eid in log.sets){if(log.sets.hasOwnProperty(eid))exIds.push(eid);}
+    for(var i=0;i<exIds.length;i++){
+      var eid2=exIds[i];
+      var exSets2=log.sets[eid2]||[];
+      // Get exercise name from exMeta or category
+      var exName2="Exercicio";
+      var isTemp=false;
+      if(log.exMeta&&log.exMeta[eid2]){exName2=log.exMeta[eid2].name;isTemp=log.exMeta[eid2].temp;}
+      else{var cat3=gC(log.catId);if(cat3){for(var ci=0;ci<cat3.exercises.length;ci++){if(cat3.exercises[ci].id===eid2){exName2=cat3.exercises[ci].name;break;}}}}
+      var bestW=0;
+      for(var s=0;s<exSets2.length;s++){if(exSets2[s].weight>bestW)bestW=exSets2[s].weight;}
+      if(bestW===0)continue;
+      var lastReps=0;
+      for(var s=exSets2.length-1;s>=0;s--){if(exSets2[s].weight===bestW){lastReps=exSets2[s].reps||0;break;}}
+      var exRow=document.createElement("div");
+      exRow.style.cssText="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)";
+      var exName=document.createElement("div");
+      exName.style.cssText="font-size:11px;color:#888;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis";
+      exName.innerHTML=exName2+(isTemp?" <span style='font-size:8px;color:"+col+";opacity:0.7'>(extra)</span>":"");
+      var exVal=document.createElement("div");
+      exVal.style.cssText="font-size:11px;font-weight:700;color:"+col+";flex-shrink:0;margin-left:8px";
+      exVal.textContent=bestW+"kg x"+lastReps;
+      exRow.appendChild(exName);exRow.appendChild(exVal);
+      exListDiv.appendChild(exRow);
+      shown++;
     }
+    if(shown>0) el.appendChild(exListDiv);
   }
 
   document.getElementById("summary-modal").className="conf-bg show";
@@ -2166,6 +2351,10 @@ document.getElementById("rt-weight").onclick=function(){setRTab("weight");};
 document.getElementById("rt-month").onclick=function(){setRTab("month");};
 document.getElementById("rt-year").onclick=function(){setRTab("year");};
 document.getElementById("btn-new-cat").onclick=function(){openCatModal(null);};
+(function(){var b=document.getElementById("btn-close-temp-ex");if(b)b.onclick=function(){document.getElementById("temp-ex-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("temp-ex-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
+(function(){var b=document.getElementById("btn-cancel-sess-remove");if(b)b.onclick=function(){pendingSessRemove=null;document.getElementById("sess-remove-modal").className="conf-bg";};})();
+(function(){var b=document.getElementById("btn-confirm-sess-remove");if(b)b.onclick=confirmRemoveSessEx;})();
 document.getElementById("btn-close-ex-hist").onclick=function(){document.getElementById("ex-hist-modal").className="modal-bg";};
 document.getElementById("ex-hist-modal").onclick=function(e){if(e.target===this)document.getElementById("ex-hist-modal").className="modal-bg";};
 document.getElementById("btn-close-ficha").onclick=function(){document.getElementById("ficha-modal").className="modal-bg";};
@@ -2757,7 +2946,7 @@ function renderDashTreino(){
   btn.textContent = "INICIAR";
   (function(c){btn.onclick = function(){
     gymOn=true; applyGym();
-    curCatId=c.id; sessData={};
+    curCatId=c.id; sessData={}; sessExercises=null;
     renderChips(); showWorkout();
     startSessTimer();
     // Scroll to workout
