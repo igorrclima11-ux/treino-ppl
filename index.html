@@ -312,7 +312,10 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
 <div class="page" id="page-report">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">
     <div style="font-weight:800;font-size:22px;letter-spacing:-0.5px">Relatorios</div>
-    <button class="xbtn" id="btn-pdf">PDF</button>
+    <div style="display:flex;gap:6px">
+      <button class="xbtn" id="btn-evolution" style="border-color:var(--accent)44;color:var(--accent)">EVOLUCAO</button>
+      <button class="xbtn" id="btn-pdf">PDF</button>
+    </div>
   </div>
   <div style="display:flex;gap:5px;margin-bottom:14px">
     <button class="rtab" id="rt-week">Semana</button>
@@ -617,6 +620,48 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
     <div class="slabel">GRUPO MUSCULAR</div>
     <div id="muscle-picker" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px"></div>
     <button id="btn-save-lib" style="width:100%;padding:12px;border-radius:11px;background:#A855F7;color:#000;border:none;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;font-family:Courier,monospace">SALVAR</button>
+  </div>
+</div>
+
+<!-- MODAL: EVOLUTION REPORT (shareable) -->
+<div class="modal-bg" id="evolution-modal">
+  <div class="modal-sh" style="padding-bottom:30px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-weight:800;font-size:16px">Relatorio de Evolucao</div>
+      <button class="xbtn" id="btn-close-evolution">X</button>
+    </div>
+    <div id="evolution-card" style="background:#08080F;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:22px 20px;margin-bottom:16px">
+      <div id="evolution-content"></div>
+    </div>
+    <div style="display:flex;gap:9px">
+      <button id="btn-close-evolution2" style="flex:1;padding:12px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#888;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">FECHAR</button>
+      <button id="btn-share-evolution" style="flex:1;padding:12px;border-radius:10px;background:var(--accent)22;border:1px solid var(--accent)44;color:var(--accent);font-weight:700;font-size:10px;cursor:pointer;font-family:inherit;letter-spacing:1px">PRINT / SHARE</button>
+    </div>
+    <div style="font-size:8px;color:#333;text-align:center;margin-top:8px">Segure o botao PRINT para tirar print e compartilhar com seu personal</div>
+  </div>
+</div>
+
+<!-- MODAL: CYCLE HISTORY -->
+<div class="modal-bg" id="cycle-hist-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px" id="cycle-hist-title">Historico do Ciclo</div>
+      <button class="xbtn" id="btn-close-cycle-hist">X</button>
+    </div>
+    <div id="cycle-hist-summary" style="margin-bottom:14px"></div>
+    <div id="cycle-hist-list"></div>
+  </div>
+</div>
+
+<!-- MODAL: CYCLE HISTORY -->
+<div class="modal-bg" id="cycle-hist-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-weight:800;font-size:16px" id="cycle-hist-title">Historico</div>
+      <button class="xbtn" id="btn-close-cycle-hist">X</button>
+    </div>
+    <div id="cycle-hist-sub" style="font-size:11px;color:#555;margin-bottom:14px"></div>
+    <div id="cycle-hist-list"></div>
   </div>
 </div>
 
@@ -1777,7 +1822,7 @@ function renderLog(){
 }
 
 function exportData(){
-  var data={version:1,exportDate:today(),cats:cats,lib:lib,logs:logs,cardio:clogs};
+  var data={version:2,exportDate:today(),cats:cats,lib:lib,logs:logs,cardio:clogs,protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded,weightLog:weightLog,antroLog:antroLog,meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,schedule:schedule,theme:curTheme};
   var json=JSON.stringify(data,null,2);
   var uri="data:application/json;charset=utf-8,"+encodeURIComponent(json);
   var a=document.createElement("a");a.setAttribute("href",uri);a.setAttribute("download","treino-backup-"+today()+".json");document.body.appendChild(a);a.click();document.body.removeChild(a);
@@ -1791,7 +1836,25 @@ function importData(inp){
       var data=JSON.parse(e.target.result);
       if(!data.version||!data.logs){alert("Arquivo invalido.");return;}
       cats=data.cats||cats;lib=data.lib||lib;logs=data.logs||[];clogs=data.cardio||[];
+      if(data.protoItems)protoItems=data.protoItems;
+      if(data.protoCycles)protoCycles=data.protoCycles;
+      if(data.protoDoses)protoDoses=data.protoDoses;
+      if(data.protoConcluded)protoConcluded=data.protoConcluded;
+      if(data.weightLog)weightLog=data.weightLog;
+      if(data.antroLog)antroLog=data.antroLog;
+      if(data.meals)meals=data.meals;
+      if(data.mealChecks)mealChecks=data.mealChecks;
+      if(data.waterLog)waterLog=data.waterLog;
+      if(data.waterGoal)waterGoal=data.waterGoal;
+      if(data.waterHistory)waterHistory=data.waterHistory;
+      if(data.schedule)schedule=data.schedule;
+      if(data.theme){curTheme=data.theme;applyTheme(curTheme);}
       sls("t5_cats",cats);sls("t5_lib",lib);sls("t5_logs",logs);sls("t5_cardio",clogs);
+      sls("forge_items",protoItems);sls("forge_cycles",protoCycles);sls("forge_doses",protoDoses);
+      sls("forge_concluded",protoConcluded);sls("forge_weights",weightLog);sls("forge_antro",antroLog);
+      sls("forge_meals",meals);sls("forge_meal_checks",mealChecks);
+      sls("forge_water",waterLog);sls("forge_water_goal",waterGoal);sls("forge_water_hist",waterHistory);
+      sls("t5_schedule",schedule);
       inp.value="";renderLog();alert("Importado com sucesso!");
     }catch(err){alert("Erro ao importar o arquivo.");}
   };
@@ -1810,6 +1873,121 @@ function renderReport(){
   else if(rTab==="month")buildMonth();
   else if(rTab==="year")buildYear();
   else if(rTab==="weight")buildWeightReport();
+}
+
+function openEvolution(){
+  var fc = document.getElementById("evolution-content");
+  if(!fc) return;
+  fc.innerHTML = "";
+
+  // Header
+  var hdr = document.createElement("div");
+  hdr.style.cssText = "margin-bottom:16px";
+  var now = new Date();
+  hdr.innerHTML = "<div style='font-size:13px;font-weight:800;color:#888;letter-spacing:1px;margin-bottom:4px'>FORGE</div>"+
+    "<div style='font-size:20px;font-weight:900;color:var(--accent);letter-spacing:-0.5px'>Relatorio de Evolucao</div>"+
+    "<div style='font-size:10px;color:#555;margin-top:3px'>Gerado em "+pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()+"</div>";
+  fc.appendChild(hdr);
+
+  var div1 = document.createElement("div");
+  div1.style.cssText = "height:1px;background:var(--accent)33;margin-bottom:14px";
+  fc.appendChild(div1);
+
+  // SECTION 1: Training summary (last 30 days)
+  var d30 = new Date();d30.setDate(d30.getDate()-30);
+  var d30str = d30.getFullYear()+"-"+pad(d30.getMonth()+1)+"-"+pad(d30.getDate());
+  var recentLogs = [];
+  for(var i=0;i<logs.length;i++){if(logs[i].date>=d30str)recentLogs.push(logs[i]);}
+  var sec1 = document.createElement("div");
+  sec1.style.cssText = "margin-bottom:14px";
+  sec1.innerHTML = "<div style='font-size:10px;color:#555;letter-spacing:1.5px;font-weight:600;margin-bottom:8px'>TREINOS (30 DIAS)</div>"+
+    "<div style='font-size:24px;font-weight:800;color:var(--accent)'>"+recentLogs.length+" <span style='font-size:12px;color:#666'>sessoes</span></div>";
+  fc.appendChild(sec1);
+
+  // SECTION 2: Top exercise evolutions (best gains)
+  var gains = [];
+  for(var c=0;c<cats.length;c++){
+    var cat = cats[c];
+    for(var e=0;e<cat.exercises.length;e++){
+      var ex = cat.exercises[e];
+      if(ex.type&&ex.type!=="carga")continue;
+      var pts = [];
+      for(var li=0;li<logs.length;li++){
+        var l = logs[li];
+        if(l.catId!==cat.id||!l.sets||!l.sets[ex.id])continue;
+        var best=0;
+        for(var s=0;s<l.sets[ex.id].length;s++){if(l.sets[ex.id][s].weight>best)best=l.sets[ex.id][s].weight;}
+        if(best>0)pts.push({date:l.date,w:best});
+      }
+      if(pts.length>=2){
+        pts.sort(function(a,b){return a.date<b.date?-1:1;});
+        var diff = pts[pts.length-1].w - pts[0].w;
+        if(diff>0)gains.push({name:ex.name,from:pts[0].w,to:pts[pts.length-1].w,diff:diff,color:cat.color});
+      }
+    }
+  }
+  gains.sort(function(a,b){return b.diff-a.diff;});
+  if(gains.length){
+    var sec2 = document.createElement("div");
+    sec2.style.cssText = "margin-bottom:14px";
+    var sec2html = "<div style='font-size:10px;color:#555;letter-spacing:1.5px;font-weight:600;margin-bottom:8px'>MAIORES EVOLUCOES DE CARGA</div>";
+    var maxShow = Math.min(5, gains.length);
+    for(var g=0;g<maxShow;g++){
+      var gn = gains[g];
+      sec2html += "<div style='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04)'>"+
+        "<span style='font-size:11px;color:#CCC;font-weight:600'>"+gn.name+"</span>"+
+        "<span style='font-size:11px;font-weight:700'><span style='color:#555'>"+gn.from+"kg</span> <span style='color:"+gn.color+"'>&#8594; "+gn.to+"kg</span> <span style='color:#10D9A0'>+"+gn.diff.toFixed(1)+"</span></span></div>";
+    }
+    sec2.innerHTML = sec2html;
+    fc.appendChild(sec2);
+  }
+
+  // SECTION 3: Body measurements evolution (antro)
+  if(antroLog&&antroLog.length>=2){
+    var sorted = antroLog.slice().sort(function(a,b){return a.date<b.date?-1:1;});
+    var first = sorted[0], last = sorted[sorted.length-1];
+    var sec3 = document.createElement("div");
+    sec3.style.cssText = "margin-bottom:14px";
+    var sec3html = "<div style='font-size:10px;color:#555;letter-spacing:1.5px;font-weight:600;margin-bottom:8px'>MEDIDAS CORPORAIS ("+fmtD(first.date)+" &#8594; "+fmtD(last.date)+")</div>";
+    var shown3 = 0;
+    ANTRO_FIELDS.forEach(function(f){
+      var v1 = first.fields?first.fields[f.key]:null;
+      var v2 = last.fields?last.fields[f.key]:null;
+      if(v1===null||v1===undefined||v1===""||v2===null||v2===undefined||v2==="")return;
+      var d = Math.round((v2-v1)*10)/10;
+      var dColor = d>0?"#FB5C73":d<0?"#10D9A0":"#555";
+      sec3html += "<div style='display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)'>"+
+        "<span style='font-size:11px;color:#CCC'>"+f.label+"</span>"+
+        "<span style='font-size:11px;font-weight:700'><span style='color:#555'>"+v1+f.unit+"</span> <span style='color:var(--accent)'>&#8594; "+v2+f.unit+"</span>"+(d!==0?" <span style='color:"+dColor+"'>"+(d>0?"+":"")+d.toFixed(1)+"</span>":"")+"</span></div>";
+      shown3++;
+    });
+    if(shown3>0){sec3.innerHTML=sec3html;fc.appendChild(sec3);}
+  }
+
+  // SECTION 4: Body weight evolution
+  if(weightLog&&weightLog.length>=2){
+    var wSorted = weightLog.slice().sort(function(a,b){return a.date<b.date?-1:1;});
+    var wFirst = wSorted[0], wLast = wSorted[wSorted.length-1];
+    var wDiff = Math.round((wLast.weight-wFirst.weight)*10)/10;
+    var wColor = wDiff>0?"#FB5C73":wDiff<0?"#10D9A0":"#555";
+    var sec4 = document.createElement("div");
+    sec4.style.cssText = "margin-bottom:14px";
+    sec4.innerHTML = "<div style='font-size:10px;color:#555;letter-spacing:1.5px;font-weight:600;margin-bottom:8px'>PESO CORPORAL</div>"+
+      "<div style='font-size:13px;font-weight:700'><span style='color:#555'>"+wFirst.weight+"kg</span> <span style='color:var(--accent)'>&#8594; "+wLast.weight+"kg</span> <span style='color:"+wColor+"'>"+(wDiff>0?"+":"")+wDiff.toFixed(1)+"kg</span></div>"+
+      "<div style='font-size:9px;color:#444;margin-top:2px'>"+fmtD(wFirst.date)+" ate "+fmtD(wLast.date)+" &bull; "+wSorted.length+" registros</div>";
+    fc.appendChild(sec4);
+  }
+
+  // Footer
+  var div2 = document.createElement("div");
+  div2.style.cssText = "height:1px;background:var(--accent)33;margin-top:4px;margin-bottom:10px";
+  fc.appendChild(div2);
+  var footer = document.createElement("div");
+  footer.style.cssText = "text-align:center;font-size:9px;color:#333;letter-spacing:2px;font-weight:600";
+  footer.textContent = "FORGE - Seu treino, sua evolucao";
+  fc.appendChild(footer);
+
+  document.getElementById("evolution-modal").className = "modal-bg show";
 }
 
 function buildWeightReport(){
@@ -2739,8 +2917,20 @@ document.getElementById("btn-print-summary").onclick=function(){
   document.getElementById("summary-modal").className="conf-bg show";
   window.print();
 };
-document.getElementById("btn-do-clear").onclick=function(){logs=[];clogs=[];sls("t5_logs",[]);sls("t5_cardio",[]);document.getElementById("conf-modal").className="conf-bg";renderLog();};
+document.getElementById("btn-do-clear").onclick=function(){
+  var inp=document.getElementById("clear-confirm-inp");
+  var typed=inp?inp.value.trim().toUpperCase():"";
+  if(typed!=="APAGAR"){alert("Digite APAGAR para confirmar.");return;}
+  logs=[];clogs=[];sls("t5_logs",[]);sls("t5_cardio",[]);
+  if(inp)inp.value="";
+  document.getElementById("conf-modal").className="conf-bg";renderLog();
+};
 document.getElementById("btn-pdf").onclick=function(){window.print();};
+(function(){var b=document.getElementById("btn-evolution");if(b)b.onclick=openEvolution;})();
+(function(){var b=document.getElementById("btn-close-evolution");if(b)b.onclick=function(){document.getElementById("evolution-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("btn-close-evolution2");if(b)b.onclick=function(){document.getElementById("evolution-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("btn-share-evolution");if(b)b.onclick=function(){window.print();};})();
+(function(){var b=document.getElementById("evolution-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
 document.getElementById("rt-week").onclick=function(){setRTab("week");};
 document.getElementById("rt-weight").onclick=function(){setRTab("weight");};
 document.getElementById("rt-month").onclick=function(){setRTab("month");};
@@ -3183,6 +3373,8 @@ document.getElementById("nav-proto").onclick = function(){setPage("proto");};
 (function(){var b=document.getElementById("btn-water-cfg");if(b)b.onclick=function(){var inp=document.getElementById("water-goal-inp");if(inp)inp.value=String(waterGoal);document.getElementById("water-cfg-modal").className="conf-bg show";};})();
 (function(){var b=document.getElementById("btn-cancel-water-cfg");if(b)b.onclick=function(){document.getElementById("water-cfg-modal").className="conf-bg";};})();
 (function(){var b=document.getElementById("btn-save-water-cfg");if(b)b.onclick=function(){var inp=document.getElementById("water-goal-inp");var g=inp?parseInt(inp.value)||3000:3000;waterGoal=g;sls("forge_water_goal",waterGoal);document.getElementById("water-cfg-modal").className="conf-bg";renderWater();renderWaterMiniChart();};})();
+(function(){var b=document.getElementById("btn-close-cycle-hist");if(b)b.onclick=function(){document.getElementById("cycle-hist-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("cycle-hist-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
 (function(){var b=document.getElementById("btn-add-antro");if(b)b.onclick=function(){openAntroModal(null);};})();
 (function(){var b=document.getElementById("btn-close-antro");if(b)b.onclick=function(){document.getElementById("antro-modal").className="modal-bg";};})();
 (function(){var b=document.getElementById("btn-save-antro");if(b)b.onclick=saveAntro;})();
@@ -3208,6 +3400,7 @@ var meals = gls("forge_meals", [{id:"m1",name:"Cafe da manha",desc:""},{id:"m2",
 var mealChecks = gls("forge_meal_checks", {}); // {date: {mealId: {done, note}}}
 var waterLog = gls("forge_water", {}); // {date: ml}
 var waterGoal = gls("forge_water_goal", 3000);
+var lastWaterAdd = 0; // tracks last addition for accurate undo
 var waterHistory = gls("forge_water_hist", []); // [{date, ml}]
 var editMealId = null;
 var antroLog = gls("forge_antro", []); // [{id, date, fields:{peso, cintura, ...}, custom:[{name,val}]}]
@@ -3822,8 +4015,8 @@ function renderWater(){
 function addWater(ml){
   var today2 = today();
   waterLog[today2] = (waterLog[today2]||0) + ml;
+  lastWaterAdd = ml;
   sls("forge_water", waterLog);
-  // Update history
   syncWaterHistory();
   renderWater();
   renderWaterMiniChart();
@@ -3833,8 +4026,11 @@ function addWater(ml){
 function undoWater(){
   var today2 = today();
   var current = waterLog[today2] || 0;
-  // Undo last add - subtract 250 as default, but track better
-  waterLog[today2] = Math.max(0, current - 250);
+  if(current<=0) return;
+  // Undo exactly the last added amount (fallback 250 if unknown)
+  var amt = lastWaterAdd>0 ? lastWaterAdd : 250;
+  waterLog[today2] = Math.max(0, current - amt);
+  lastWaterAdd = 0;
   sls("forge_water", waterLog);
   syncWaterHistory();
   renderWater();
@@ -4008,67 +4204,6 @@ function saveWeight(){
   if(inp) inp.value="";
 }
 
-function renderMiniWeightChart(){
-  var el = document.getElementById("dash-weight-chart");
-  if(!el) return;
-  el.innerHTML = "";
-  if(!weightLog || weightLog.length < 2) return;
-  var sorted = weightLog.slice().sort(function(a,b){return a.date<b.date?1:-1;});
-  var last7 = sorted.slice(0, 7).reverse();
-  var weights = last7.map(function(e){return e.weight;});
-  var minW = Math.min.apply(null, weights);
-  var maxW = Math.max.apply(null, weights);
-  var range = maxW - minW || 0.1;
-  var first = last7[0].weight;
-  var lastW = last7[last7.length-1].weight;
-  var diff = Math.round((lastW - first)*10)/10;
-  var diffColor = diff > 0 ? "#FF3D71" : diff < 0 ? "#00D68F" : "#555";
-
-  var wrap = document.createElement("div");
-  wrap.style.cssText = "background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 14px";
-
-  // Header
-  var hdr = document.createElement("div");
-  hdr.style.cssText = "display:flex;justify-content:space-between;align-items:center;margin-bottom:10px";
-  hdr.innerHTML = "<div style='font-size:9px;color:#555;letter-spacing:1.5px;font-weight:600'>PESO CORPORAL</div><div style='font-size:11px;font-weight:700;color:"+diffColor+"'>"+(diff>0?"+":"")+diff.toFixed(1)+"kg <span style='font-size:9px;color:#444'>ultimos "+last7.length+" registros</span></div>";
-  wrap.appendChild(hdr);
-
-  // Bar chart
-  var BAR_H = 40;
-  var chart = document.createElement("div");
-  chart.style.cssText = "display:flex;align-items:flex-end;gap:4px;height:"+BAR_H+"px;margin-bottom:6px";
-  last7.forEach(function(entry, i){
-    var pct = (entry.weight - minW) / range;
-    var barH = Math.max(6, Math.round(pct * (BAR_H-8)) + 8);
-    var isLast = i === last7.length-1;
-    var col = isLast ? "var(--accent)" : "rgba(255,255,255,0.12)";
-    var bar = document.createElement("div");
-    bar.style.cssText = "flex:1;border-radius:4px 4px 0 0;background:"+col+";height:"+barH+"px;position:relative";
-    if(isLast || i===0){
-      var lbl = document.createElement("div");
-      lbl.style.cssText = "position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8px;color:"+col+";font-weight:700;white-space:nowrap";
-      lbl.textContent = entry.weight+"kg";
-      bar.appendChild(lbl);
-    }
-    chart.appendChild(bar);
-  });
-  wrap.appendChild(chart);
-
-  // Baseline
-  var base = document.createElement("div");
-  base.style.cssText = "height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px";
-  wrap.appendChild(base);
-
-  // Date labels (first and last)
-  var dates = document.createElement("div");
-  dates.style.cssText = "display:flex;justify-content:space-between";
-  var dp1 = last7[0].date.split("-");
-  var dp2 = last7[last7.length-1].date.split("-");
-  dates.innerHTML = "<span style='font-size:8px;color:#444'>"+pad(+dp1[2])+"/"+pad(+dp1[1])+"</span><span style='font-size:8px;color:#444'>"+pad(+dp2[2])+"/"+pad(+dp2[1])+"</span>";
-  wrap.appendChild(dates);
-  el.appendChild(wrap);
-}
-
 function updWeightCard(){
   var el = document.getElementById("weight-last");
   if(!el) return;
@@ -4153,6 +4288,53 @@ function confirmDoseNote(){
   p.dateStr = chosenDate;
   closeDoseNoteModal();
   handleToggleDoseWithNote(p.itemId, p.dateStr, p.btn, p.card, p.isCycleItem, p.cycle, note);
+}
+
+function openCycleHistory(cycle){
+  var titleEl = document.getElementById("cycle-hist-title");
+  var subEl = document.getElementById("cycle-hist-sub");
+  var listEl = document.getElementById("cycle-hist-list");
+  if(!listEl) return;
+  if(titleEl) titleEl.textContent = cycle.name;
+  // Find the item for this cycle
+  var item = null;
+  if(cycle.itemId){for(var i=0;i<protoItems.length;i++){if(protoItems[i].id===cycle.itemId){item=protoItems[i];break;}}}
+  // Gather all doses for this cycle's item
+  var doses = [];
+  if(item){
+    for(var d=0;d<protoDoses.length;d++){
+      if(protoDoses[d].itemId===item.id) doses.push(protoDoses[d]);
+    }
+  }
+  // Sort most recent first
+  doses.sort(function(a,b){
+    if(a.date!==b.date) return a.date<b.date?1:-1;
+    return (a.time||"")<(b.time||"")?1:-1;
+  });
+  if(subEl) subEl.textContent = (item?item.name+" "+item.dose+" "+item.unit:"") + " - " + doses.length + " aplicacoes";
+  listEl.innerHTML = "";
+  if(!doses.length){
+    listEl.innerHTML = "<div class='empty-state' style='padding:24px'><div class='es-icon' style='font-size:32px'>&#128138;</div><div class='es-title' style='font-size:13px'>Nenhuma aplicacao</div><div class='es-sub'>As aplicacoes marcadas aparecerao aqui.</div></div>";
+    return;
+  }
+  for(var i=0;i<doses.length;i++){
+    var ds = doses[i];
+    var card = document.createElement("div");
+    card.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid "+cycle.color+"22;border-radius:10px;padding:11px 13px;margin-bottom:7px";
+    var top = document.createElement("div");
+    top.style.cssText = "display:flex;justify-content:space-between;align-items:center";
+    var appNum = doses.length - i;
+    top.innerHTML = "<div style='display:flex;align-items:center;gap:8px'><span style='font-size:10px;font-weight:800;color:"+cycle.color+";background:"+cycle.color+"18;border-radius:5px;padding:2px 7px'>#"+appNum+"</span><span style='font-size:12px;font-weight:700;color:#CCC'>"+fmtD(ds.date)+"</span></div><span style='font-size:10px;color:#555'>"+(ds.time||"")+"</span>";
+    card.appendChild(top);
+    if(ds.note){
+      var note = document.createElement("div");
+      note.style.cssText = "font-size:11px;color:#999;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.04);font-style:italic;line-height:1.4";
+      note.textContent = '"' + ds.note + '"';
+      card.appendChild(note);
+    }
+    listEl.appendChild(card);
+  }
+  document.getElementById("cycle-hist-modal").className = "modal-bg show";
 }
 
 function getNextAppDate(cycle, item){
@@ -4270,8 +4452,14 @@ function renderProtoCycles(){
       card.appendChild(doneMsg);
     }
 
+    // History button (full cycle history)
+    var histBtn=document.createElement("button");histBtn.className="xbtn";
+    histBtn.style.cssText="width:100%;border-color:"+cycle.color+"44;color:"+cycle.color+";font-size:9px;padding:8px;margin-top:4px;margin-bottom:6px";
+    histBtn.textContent="Ver historico de aplicacoes";
+    (function(cyc){histBtn.onclick=function(){openCycleHistory(cyc);};})(cycle);
+    card.appendChild(histBtn);
     // Action buttons row
-    var actRow=document.createElement("div");actRow.style.cssText="display:flex;gap:8px;margin-top:4px";
+    var actRow=document.createElement("div");actRow.style.cssText="display:flex;gap:8px;margin-top:0";
     var conc=document.createElement("button");conc.className="xbtn";
     conc.style.cssText="flex:1;border-color:rgba(0,214,143,0.3);color:#00D68F;font-size:9px;padding:8px";
     conc.textContent="Concluir";
