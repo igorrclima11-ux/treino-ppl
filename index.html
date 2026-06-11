@@ -213,6 +213,8 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
       <div id="dash-day" style="font-size:11px;color:#555;letter-spacing:1.5px;font-weight:600"></div>
       <div id="dash-date" style="font-size:22px;font-weight:800;color:#E8E8F0;letter-spacing:-0.5px;margin-top:1px"></div>
     </div>
+    <!-- Weekly summary -->
+    <div id="dash-week-summary" style="margin-bottom:10px"></div>
     <!-- Suggested workout -->
     <div id="dash-treino" style="margin-bottom:10px"></div>
     <!-- Protocol today -->
@@ -671,6 +673,22 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
       <div style="font-weight:800;font-size:16px" id="antro-modal-title">Nova Avaliacao</div>
       <button class="xbtn" id="btn-close-antro">X</button>
+    </div>
+    <div id="antro-profile-wrap" style="display:none;background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.15);border-radius:10px;padding:12px;margin-bottom:14px">
+      <div style="font-size:10px;color:var(--accent);font-weight:700;margin-bottom:8px">Para calcular o % de gordura (formula US Navy), informe uma unica vez:</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="flex:1">
+          <div class="slabel" style="margin-bottom:4px">ALTURA (cm)</div>
+          <input type="number" id="antro-height" placeholder="175" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#DDD;font-size:14px;font-weight:700;padding:9px;outline:none;text-align:center;font-family:inherit"/>
+        </div>
+        <div style="flex:1">
+          <div class="slabel" style="margin-bottom:4px">SEXO</div>
+          <div style="display:flex;gap:4px">
+            <button id="antro-sex-m" style="flex:1;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#555;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">M</button>
+            <button id="antro-sex-f" style="flex:1;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#555;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">F</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="slabel">DATA DA AVALIACAO</div>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px">
@@ -1690,6 +1708,14 @@ function showSummary(log, cardioEntry){
     var exListDiv=document.createElement("div");
     exListDiv.style.cssText="background:rgba(255,255,255,0.03);border-radius:12px;padding:6px 12px;border:1px solid rgba(255,255,255,0.06)";
     var shown=0;
+    // Find PREVIOUS session of same category (before this log) for comparison
+    var prevLog=null;
+    for(var pli=logs.length-1;pli>=0;pli--){
+      var pl=logs[pli];
+      if(pl.catId===log.catId&&pl.sets&&pl.id!==log.id&&pl.date<=log.date){
+        if(pl.id<log.id){prevLog=pl;break;}
+      }
+    }
     // Build ordered list of exercise IDs from log.sets
     var exIds=[];
     for(var eid in log.sets){if(log.sets.hasOwnProperty(eid))exIds.push(eid);}
@@ -1706,6 +1732,7 @@ function showSummary(log, cardioEntry){
       if(log.exMeta&&log.exMeta[eid2]&&log.exMeta[eid2].type)exType2=log.exMeta[eid2].type;
       else{var cat4=gC(log.catId);if(cat4){for(var ci2=0;ci2<cat4.exercises.length;ci2++){if(cat4.exercises[ci2].id===eid2&&cat4.exercises[ci2].type){exType2=cat4.exercises[ci2].type;break;}}}}
       var valText="";
+      var compHtml="";
       if(exType2==="carga"){
         var bestW=0;
         for(var s=0;s<exSets2.length;s++){if(exSets2[s].weight>bestW)bestW=exSets2[s].weight;}
@@ -1713,6 +1740,18 @@ function showSummary(log, cardioEntry){
         var lastReps=0;
         for(var s=exSets2.length-1;s>=0;s--){if(exSets2[s].weight===bestW){lastReps=exSets2[s].reps||0;break;}}
         valText=bestW+"kg x"+lastReps;
+        // Comparison vs previous session
+        if(prevLog&&prevLog.sets&&prevLog.sets[eid2]){
+          var prevBest=0;
+          var pSets=prevLog.sets[eid2];
+          for(var ps=0;ps<pSets.length;ps++){if(pSets[ps].weight>prevBest)prevBest=pSets[ps].weight;}
+          if(prevBest>0){
+            var wDelta=Math.round((bestW-prevBest)*10)/10;
+            if(wDelta>0)compHtml=" <span style='font-size:9px;color:#10D9A0;font-weight:800'>+"+wDelta+"kg</span>";
+            else if(wDelta<0)compHtml=" <span style='font-size:9px;color:#FB5C73;font-weight:700'>"+wDelta+"kg</span>";
+            else compHtml=" <span style='font-size:9px;color:#555;font-weight:600'>=</span>";
+          }
+        }
       } else if(exType2==="repeticao"){
         var totalReps=0,maxReps=0;
         for(var s=0;s<exSets2.length;s++){if(exSets2[s].reps>maxReps)maxReps=exSets2[s].reps;}
@@ -1731,7 +1770,7 @@ function showSummary(log, cardioEntry){
       exName.innerHTML=exName2+(isTemp?" <span style='font-size:8px;color:"+col+";opacity:0.7'>(extra)</span>":"");
       var exVal=document.createElement("div");
       exVal.style.cssText="font-size:11px;font-weight:700;color:"+col+";flex-shrink:0;margin-left:8px";
-      exVal.textContent=valText;
+      exVal.innerHTML=valText+compHtml;
       exRow.appendChild(exName);exRow.appendChild(exVal);
       exListDiv.appendChild(exRow);
       shown++;
@@ -1822,7 +1861,7 @@ function renderLog(){
 }
 
 function exportData(){
-  var data={version:2,exportDate:today(),cats:cats,lib:lib,logs:logs,cardio:clogs,protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded,weightLog:weightLog,antroLog:antroLog,meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,schedule:schedule,theme:curTheme};
+  var data={version:2,exportDate:today(),cats:cats,lib:lib,logs:logs,cardio:clogs,protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded,weightLog:weightLog,antroLog:antroLog,bodyProfile:bodyProfile,meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,schedule:schedule,theme:curTheme};
   var json=JSON.stringify(data,null,2);
   var uri="data:application/json;charset=utf-8,"+encodeURIComponent(json);
   var a=document.createElement("a");a.setAttribute("href",uri);a.setAttribute("download","treino-backup-"+today()+".json");document.body.appendChild(a);a.click();document.body.removeChild(a);
@@ -1842,6 +1881,7 @@ function importData(inp){
       if(data.protoConcluded)protoConcluded=data.protoConcluded;
       if(data.weightLog)weightLog=data.weightLog;
       if(data.antroLog)antroLog=data.antroLog;
+      if(data.bodyProfile)bodyProfile=data.bodyProfile;
       if(data.meals)meals=data.meals;
       if(data.mealChecks)mealChecks=data.mealChecks;
       if(data.waterLog)waterLog=data.waterLog;
@@ -1852,6 +1892,7 @@ function importData(inp){
       sls("t5_cats",cats);sls("t5_lib",lib);sls("t5_logs",logs);sls("t5_cardio",clogs);
       sls("forge_items",protoItems);sls("forge_cycles",protoCycles);sls("forge_doses",protoDoses);
       sls("forge_concluded",protoConcluded);sls("forge_weights",weightLog);sls("forge_antro",antroLog);
+      sls("forge_profile",bodyProfile);
       sls("forge_meals",meals);sls("forge_meal_checks",mealChecks);
       sls("forge_water",waterLog);sls("forge_water_goal",waterGoal);sls("forge_water_hist",waterHistory);
       sls("t5_schedule",schedule);
@@ -3106,6 +3147,7 @@ function gdAutoBackup(){
     protoConcluded:protoConcluded,
     weightLog:weightLog,
     antroLog:antroLog,
+    bodyProfile:bodyProfile,
     meals:meals,
     mealChecks:mealChecks,
     waterLog:waterLog,
@@ -3148,7 +3190,7 @@ function gdSave(){
   if(!gdToken){alert("Conecte ao Google Drive primeiro.");return;}
   var status = document.getElementById("gdrive-status");
   if(status){status.textContent = "Salvando...";status.style.color = "#FF9F0A";}
-  var data = {version:1,exportDate:today(),cats:cats,lib:lib,logs:logs,cardio:clogs,protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded,weightLog:weightLog,antroLog:antroLog,meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,schedule:schedule,theme:curTheme};
+  var data = {version:1,exportDate:today(),cats:cats,lib:lib,logs:logs,cardio:clogs,protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded,weightLog:weightLog,antroLog:antroLog,bodyProfile:bodyProfile,meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,schedule:schedule,theme:curTheme};
   var json = JSON.stringify(data);
   // Check if file exists first
   fetch("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D%27" + GD_FILE_NAME + "%27&fields=files(id,name)", {
@@ -3217,6 +3259,7 @@ function gdLoad(){
       if(data.protoConcluded) protoConcluded=data.protoConcluded;
       if(data.weightLog) weightLog=data.weightLog;
       if(data.antroLog) antroLog=data.antroLog;
+      if(data.bodyProfile) bodyProfile=data.bodyProfile;
       if(data.meals) meals=data.meals;
       if(data.mealChecks) mealChecks=data.mealChecks;
       if(data.waterLog) waterLog=data.waterLog;
@@ -3227,7 +3270,7 @@ function gdLoad(){
       sls("t5_cats",cats);sls("t5_lib",lib);sls("t5_logs",logs);sls("t5_cardio",clogs);
       sls("forge_items",protoItems);sls("forge_cycles",protoCycles);sls("forge_doses",protoDoses);
       sls("forge_concluded",protoConcluded);sls("forge_weights",weightLog);
-      sls("forge_antro",antroLog);
+      sls("forge_antro",antroLog);sls("forge_profile",bodyProfile);
       sls("forge_meals",meals);sls("forge_meal_checks",mealChecks);
       sls("forge_water",waterLog);sls("forge_water_goal",waterGoal);sls("forge_water_hist",waterHistory);
       sls("t5_schedule",schedule);
@@ -3380,6 +3423,8 @@ document.getElementById("nav-proto").onclick = function(){setPage("proto");};
 (function(){var b=document.getElementById("btn-save-antro");if(b)b.onclick=saveAntro;})();
 (function(){var b=document.getElementById("btn-delete-antro");if(b)b.onclick=deleteAntro;})();
 (function(){var b=document.getElementById("btn-add-antro-field");if(b)b.onclick=function(){antroCustomFields.push({name:"",val:""});renderAntroFields();};})();
+(function(){var b=document.getElementById("antro-sex-m");if(b)b.onclick=function(){bodyProfile.sex="M";sls("forge_profile",bodyProfile);updAntroSexButtons();};})();
+(function(){var b=document.getElementById("antro-sex-f");if(b)b.onclick=function(){bodyProfile.sex="F";sls("forge_profile",bodyProfile);updAntroSexButtons();};})();
 (function(){var b=document.getElementById("antro-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
 (function(){var b=document.getElementById("btn-add-meal");if(b)b.onclick=function(){openMealModal(null);};})();
 (function(){var b=document.getElementById("btn-close-meal");if(b)b.onclick=function(){document.getElementById("meal-modal").className="modal-bg";};})();
@@ -3404,6 +3449,7 @@ var lastWaterAdd = 0; // tracks last addition for accurate undo
 var waterHistory = gls("forge_water_hist", []); // [{date, ml}]
 var editMealId = null;
 var antroLog = gls("forge_antro", []); // [{id, date, fields:{peso, cintura, ...}, custom:[{name,val}]}]
+var bodyProfile = gls("forge_profile", {height:null, sex:null}); // for body fat calc
 var editAntroId = null;
 var antroChartMetric = "peso";
 var antroCustomFields = []; // temp custom fields in modal
@@ -3551,9 +3597,103 @@ function buildProtoItemCard(item, dateStr){
 // -- DASHBOARD ----------------------------------------------------------------
 function renderDashboard(){
   try{renderDashDate();}catch(e){}
+  try{renderDashWeekSummary();}catch(e){}
   try{renderDashTreino();}catch(e){}
   try{renderDashProto();}catch(e){}
   try{renderDashLast();}catch(e){}
+}
+
+function renderDashWeekSummary(){
+  var el = document.getElementById("dash-week-summary");
+  if(!el) return;
+  el.innerHTML = "";
+  // Week boundaries (Sunday to Saturday, current week)
+  var now = new Date();
+  var weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay());
+  var wsStr = weekStart.getFullYear()+"-"+pad(weekStart.getMonth()+1)+"-"+pad(weekStart.getDate());
+  var todayStr = today();
+
+  // 1. Treinos da semana (realizados / planejados)
+  var doneCount = 0;
+  var doneDates = {};
+  for(var i=0;i<logs.length;i++){
+    if(logs[i].date>=wsStr && logs[i].date<=todayStr && !doneDates[logs[i].date]){
+      doneDates[logs[i].date]=1; doneCount++;
+    }
+  }
+  // Planned days this week (from schedule)
+  var plannedCount = 0;
+  if(schedule){
+    for(var d=0;d<7;d++){if(schedule[d])plannedCount++;}
+  }
+
+  // 2. Protocolo da semana (% de aderencia dos dias passados)
+  var protoExpected = 0, protoTaken = 0;
+  for(var dd=0;dd<=now.getDay();dd++){
+    var cd = new Date(weekStart);cd.setDate(weekStart.getDate()+dd);
+    var cdStr = cd.getFullYear()+"-"+pad(cd.getMonth()+1)+"-"+pad(cd.getDate());
+    var cdDow = cd.getDay();
+    for(var pi=0;pi<protoItems.length;pi++){
+      var it = protoItems[pi];
+      var due = false;
+      if(it.freq==="diario") due=true;
+      else if(it.freq==="semanal"&&it.days&&it.days.indexOf(cdDow)>-1) due=true;
+      if(!due) continue;
+      protoExpected++;
+      for(var di=0;di<protoDoses.length;di++){
+        if(protoDoses[di].itemId===it.id&&protoDoses[di].date===cdStr){protoTaken++;break;}
+      }
+    }
+  }
+  var protoPct = protoExpected>0 ? Math.round((protoTaken/protoExpected)*100) : null;
+
+  // 3. Agua - dias da semana que bateu a meta
+  var waterDays = 0, waterTotal = 0;
+  for(var wd=0;wd<=now.getDay();wd++){
+    var wdate = new Date(weekStart);wdate.setDate(weekStart.getDate()+wd);
+    var wStr = wdate.getFullYear()+"-"+pad(wdate.getMonth()+1)+"-"+pad(wdate.getDate());
+    waterTotal++;
+    if((waterLog[wStr]||0)>=waterGoal)waterDays++;
+  }
+
+  // Skip if nothing to show
+  if(doneCount===0 && protoPct===null && waterDays===0) return;
+
+  var card = document.createElement("div");
+  card.style.cssText = "display:flex;gap:7px";
+
+  // Treino chip
+  var tColor = plannedCount>0&&doneCount>=plannedCount?"#10D9A0":doneCount>0?"var(--accent)":"#555";
+  var tChip = document.createElement("div");
+  tChip.style.cssText = "flex:1;background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:var(--r-md);padding:9px 6px;text-align:center";
+  tChip.innerHTML = "<div style='font-size:15px;font-weight:800;color:"+tColor+"'>"+doneCount+(plannedCount>0?"<span style='font-size:10px;color:#555'>/"+plannedCount+"</span>":"")+"</div><div style='font-size:7px;color:#555;letter-spacing:1px;margin-top:1px'>TREINOS</div>";
+  card.appendChild(tChip);
+
+  // Protocolo chip
+  if(protoPct!==null){
+    var pColor = protoPct>=80?"#10D9A0":protoPct>=50?"#FB923C":"#FB5C73";
+    var pChip = document.createElement("div");
+    pChip.style.cssText = "flex:1;background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:var(--r-md);padding:9px 6px;text-align:center";
+    pChip.innerHTML = "<div style='font-size:15px;font-weight:800;color:"+pColor+"'>"+protoPct+"%</div><div style='font-size:7px;color:#555;letter-spacing:1px;margin-top:1px'>PROTOCOLO</div>";
+    card.appendChild(pChip);
+  }
+
+  // Agua chip
+  var wColor = waterDays===waterTotal?"#10D9A0":waterDays>0?"#3B82F6":"#555";
+  var wChip = document.createElement("div");
+  wChip.style.cssText = "flex:1;background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:var(--r-md);padding:9px 6px;text-align:center";
+  wChip.innerHTML = "<div style='font-size:15px;font-weight:800;color:"+wColor+"'>"+waterDays+"<span style='font-size:10px;color:#555'>/"+waterTotal+"</span></div><div style='font-size:7px;color:#555;letter-spacing:1px;margin-top:1px'>AGUA</div>";
+  card.appendChild(wChip);
+
+  // Header label
+  var wrap = document.createElement("div");
+  var lbl = document.createElement("div");
+  lbl.style.cssText = "font-size:9px;color:#555;letter-spacing:1.5px;font-weight:600;margin-bottom:6px";
+  lbl.textContent = "ESSA SEMANA";
+  wrap.appendChild(lbl);
+  wrap.appendChild(card);
+  el.appendChild(wrap);
 }
 
 function renderDashDate(){
@@ -3756,6 +3896,9 @@ function renderAntro(){
   metricRow.style.cssText = "display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px";
   // Build list of available metrics (standard + any custom found)
   var allMetrics = ANTRO_FIELDS.slice();
+  if(bodyProfile && bodyProfile.height && bodyProfile.sex){
+    allMetrics.push({key:"bodyfat",label:"% Gordura",unit:"%"});
+  }
   var customSeen = {};
   for(var si=0;si<antroLog.length;si++){
     if(antroLog[si].custom){
@@ -3857,6 +4000,17 @@ function renderAntro(){
       cell.innerHTML = "<div style='font-size:8px;color:#555;letter-spacing:0.5px'>"+f.label.toUpperCase()+"</div><div style='font-size:13px;font-weight:700;color:#CCC;margin-top:1px'>"+val+"<span style='font-size:9px;color:#555'>"+f.unit+"</span>"+(d!==null&&d!==0?" <span style='font-size:9px;color:"+dColor+";font-weight:700'>"+(d>0?"+":"")+d.toFixed(1)+"</span>":"")+"</div>";
       grid.appendChild(cell);
     });
+    // Body fat % (US Navy) - calculated
+    var bf = calcBodyFat(a.fields);
+    if(bf!==null){
+      var prevBf = prev ? calcBodyFat(prev.fields) : null;
+      var bfD = (prevBf!==null) ? Math.round((bf-prevBf)*10)/10 : null;
+      var bfDColor = bfD>0?"#FB5C73":bfD<0?"#10D9A0":"#555";
+      var bfCell = document.createElement("div");
+      bfCell.style.cssText = "background:var(--accent)11;border:1px solid var(--accent)33;border-radius:7px;padding:7px 9px";
+      bfCell.innerHTML = "<div style='font-size:8px;color:var(--accent);letter-spacing:0.5px'>% GORDURA (EST.)</div><div style='font-size:13px;font-weight:700;color:var(--accent);margin-top:1px'>"+bf+"<span style='font-size:9px;opacity:0.6'>%</span>"+(bfD!==null&&bfD!==0?" <span style='font-size:9px;color:"+bfDColor+";font-weight:700'>"+(bfD>0?"+":"")+bfD.toFixed(1)+"</span>":"")+"</div>";
+      grid.appendChild(bfCell);
+    }
     // Custom fields
     if(a.custom){
       a.custom.forEach(function(cf){
@@ -3873,6 +4027,9 @@ function renderAntro(){
 }
 
 function getAntroVal(assessment, metricKey){
+  if(metricKey==="bodyfat"){
+    return calcBodyFat(assessment.fields);
+  }
   if(metricKey.indexOf("custom_")===0){
     var cname = metricKey.substring(7);
     if(assessment.custom){
@@ -3932,9 +4089,53 @@ function renderAntroFields(){
   });
 }
 
+function calcBodyFat(fields){
+  // US Navy formula - needs height, sex, cintura, pescoco (+ quadril for F)
+  if(!bodyProfile || !bodyProfile.height || !bodyProfile.sex) return null;
+  if(!fields) return null;
+  var h = parseFloat(bodyProfile.height);
+  var waist = parseFloat(fields.cintura);
+  var neck = parseFloat(fields.pescoco);
+  if(!h || !waist || !neck) return null;
+  function log10(x){return Math.log(x)/Math.LN10;}
+  var bf = null;
+  if(bodyProfile.sex === "M"){
+    if(waist - neck <= 0) return null;
+    bf = 495 / (1.0324 - 0.19077*log10(waist-neck) + 0.15456*log10(h)) - 450;
+  } else {
+    var hip = parseFloat(fields.quadril);
+    if(!hip) return null;
+    if(waist + hip - neck <= 0) return null;
+    bf = 495 / (1.29579 - 0.35004*log10(waist+hip-neck) + 0.22100*log10(h)) - 450;
+  }
+  if(bf===null || isNaN(bf) || bf<2 || bf>70) return null;
+  return Math.round(bf*10)/10;
+}
+
+function updAntroSexButtons(){
+  var bm = document.getElementById("antro-sex-m");
+  var bf = document.getElementById("antro-sex-f");
+  if(!bm||!bf) return;
+  var sel = bodyProfile.sex;
+  bm.style.background = sel==="M"?"var(--accent)22":"rgba(255,255,255,0.04)";
+  bm.style.color = sel==="M"?"var(--accent)":"#555";
+  bm.style.borderColor = sel==="M"?"var(--accent)":"rgba(255,255,255,0.08)";
+  bf.style.background = sel==="F"?"var(--accent)22":"rgba(255,255,255,0.04)";
+  bf.style.color = sel==="F"?"var(--accent)":"#555";
+  bf.style.borderColor = sel==="F"?"var(--accent)":"rgba(255,255,255,0.08)";
+}
+
 function openAntroModal(antroId){
   editAntroId = antroId;
   antroCustomFields = [];
+  // Show profile fields if height/sex not set yet
+  var profWrap = document.getElementById("antro-profile-wrap");
+  if(profWrap){
+    profWrap.style.display = (!bodyProfile.height || !bodyProfile.sex) ? "block" : "none";
+    var hInp = document.getElementById("antro-height");
+    if(hInp) hInp.value = bodyProfile.height ? String(bodyProfile.height) : "";
+    updAntroSexButtons();
+  }
   var editing = null;
   if(antroId){for(var i=0;i<antroLog.length;i++){if(antroLog[i].id===antroId){editing=antroLog[i];break;}}}
   var title = document.getElementById("antro-modal-title");
@@ -3960,6 +4161,10 @@ function openAntroModal(antroId){
 }
 
 function saveAntro(){
+  // Save body profile if filled
+  var hInp = document.getElementById("antro-height");
+  if(hInp && hInp.value){bodyProfile.height = parseFloat(hInp.value)||null;}
+  sls("forge_profile", bodyProfile);
   var dDay=document.getElementById("antro-day");
   var dMon=document.getElementById("antro-month");
   var dYr=document.getElementById("antro-year");
