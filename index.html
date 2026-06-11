@@ -390,6 +390,17 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
   <div style="font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-bottom:16px">Configuracoes</div>
   <div class="cfg-sec">
     <div class="cfg-hdr">
+      <div><div style="font-size:13px;font-weight:700;color:#E8E8F0">Conta</div><div style="font-size:9px;color:#555;margin-top:1px">Login e sincronizacao dos seus dados</div></div>
+    </div>
+    <div style="padding:16px 18px">
+      <div id="account-status" style="font-size:11px;color:#888;margin-bottom:12px;line-height:1.6">Carregando...</div>
+      <button id="btn-account-login" style="display:none;width:100%;padding:12px;border-radius:10px;background:var(--accent)22;border:1px solid var(--accent)44;color:var(--accent);font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:1px">ENTRAR / CRIAR CONTA</button>
+      <button id="btn-account-logout" style="display:none;width:100%;padding:11px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#888;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">SAIR DA CONTA</button>
+    </div>
+  </div>
+
+  <div class="cfg-sec">
+    <div class="cfg-hdr">
       <div><div style="font-size:13px;font-weight:700;color:#E8E8F0">Google Drive</div><div style="font-size:9px;color:#555;margin-top:1px">Backup automatico na nuvem</div></div>
     </div>
     <div style="padding:16px 18px">
@@ -844,6 +855,41 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
   </div>
 </div>
 
+<!-- LOGIN SCREEN (full overlay) -->
+<div id="login-screen" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto">
+  <div style="min-height:100%;display:flex;flex-direction:column;justify-content:center;padding:30px 24px;max-width:380px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:30px">
+      <div style="font-size:38px;font-weight:900;letter-spacing:3px;color:var(--accent)">FORGE</div>
+      <div style="font-size:11px;color:#555;margin-top:6px;letter-spacing:1px">Seu treino, sua evolucao</div>
+    </div>
+
+    <button id="btn-login-google" style="width:100%;padding:14px;border-radius:12px;background:#FFF;color:#1A1A1A;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
+      <span style="font-weight:900;font-size:15px">G</span> Entrar com Google
+    </button>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.08)"></div>
+      <span style="font-size:9px;color:#444;letter-spacing:1px">OU</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.08)"></div>
+    </div>
+
+    <input type="email" id="login-email" placeholder="E-mail" autocomplete="email" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:11px;color:#E8E8F0;font-size:13px;padding:13px 14px;outline:none;font-family:inherit;margin-bottom:9px"/>
+    <input type="password" id="login-pass" placeholder="Senha (minimo 6 caracteres)" autocomplete="current-password" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:11px;color:#E8E8F0;font-size:13px;padding:13px 14px;outline:none;font-family:inherit;margin-bottom:12px"/>
+
+    <div id="login-error" style="display:none;font-size:10px;color:#FB5C73;background:rgba(251,92,115,0.08);border:1px solid rgba(251,92,115,0.2);border-radius:9px;padding:9px 12px;margin-bottom:12px;line-height:1.5"></div>
+
+    <button id="btn-login-email" style="width:100%;padding:13px;border-radius:11px;background:var(--accent);color:#000;border:none;font-weight:800;font-size:12px;letter-spacing:1px;cursor:pointer;font-family:inherit;margin-bottom:9px">ENTRAR</button>
+    <button id="btn-signup-email" style="width:100%;padding:13px;border-radius:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#AAA;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;margin-bottom:18px">CRIAR CONTA</button>
+
+    <div id="login-loading" style="display:none;text-align:center;font-size:11px;color:var(--accent);margin-bottom:12px">Entrando...</div>
+
+    <button id="btn-skip-login" style="background:none;border:none;color:#444;font-size:10px;cursor:pointer;font-family:inherit;text-decoration:underline">Continuar sem conta (dados ficam so neste aparelho)</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 var COLORS = ["#22D3EE","#FB5C73","#FCD34D","#B575F9","#10D9A0","#FB923C","#3B82F6","#F472B6","#34D399","#A78BFA","#F87171","#2DD4BF"];
 var MG = ["Peito","Costas","Ombro","Biceps","Triceps","Pernas","Gluteos","Abdomen","Antebraco","Trapezio","Livre"];
@@ -3013,6 +3059,20 @@ registerSW();
 try{scheduleItemNotifs();}catch(e){}
 // Try to restore Google Drive session automatically
 setTimeout(function(){gdRestoreSession();}, 1500);
+// Firebase init + login wiring
+fbInit();
+(function(){var b=document.getElementById("btn-login-google");if(b)b.onclick=fbLoginGoogle;})();
+(function(){var b=document.getElementById("btn-login-email");if(b)b.onclick=fbLoginEmail;})();
+(function(){var b=document.getElementById("btn-signup-email");if(b)b.onclick=fbSignupEmail;})();
+(function(){var b=document.getElementById("btn-skip-login");if(b)b.onclick=function(){
+  try{localStorage.setItem("forge_skip_login","1");}catch(e){}
+  hideLoginScreen();updAccountUI();
+};})();
+(function(){var b=document.getElementById("btn-account-logout");if(b)b.onclick=function(){fbLogout();};})();
+(function(){var b=document.getElementById("btn-account-login");if(b)b.onclick=function(){
+  try{localStorage.removeItem("forge_skip_login");}catch(e){}
+  showLoginScreen();
+};})();
 setTimeout(function(){checkDraft();}, 800);
 // Periodic wake lock check during workouts
 setInterval(ensureWakeLock, 10000);
@@ -3134,6 +3194,8 @@ function gdLogout(){
 }
 
 function gdAutoBackup(){
+  // Cloud sync (Firestore) - always attempt, has own guards
+  try{fsScheduleSave();}catch(e){}
   // Silent backup - only if connected, no alerts
   if(!gdToken || !gdConnected) return;
   var data = {
@@ -3450,6 +3512,225 @@ var waterHistory = gls("forge_water_hist", []); // [{date, ml}]
 var editMealId = null;
 var antroLog = gls("forge_antro", []); // [{id, date, fields:{peso, cintura, ...}, custom:[{name,val}]}]
 var bodyProfile = gls("forge_profile", {height:null, sex:null}); // for body fat calc
+
+// ============================================================================
+// FIREBASE - AUTH + FIRESTORE SYNC
+// ============================================================================
+var FB_CONFIG = {
+  apiKey: "AIzaSyCqyCaUHS-OnHvLM-UJ8Xsuc-slM2nembQ",
+  authDomain: "forge-1ca4e.firebaseapp.com",
+  projectId: "forge-1ca4e",
+  storageBucket: "forge-1ca4e.firebasestorage.app",
+  messagingSenderId: "245251799445",
+  appId: "1:245251799445:web:c973c8f1bf44cfa6735e9c"
+};
+var fbAuth = null, fbDb = null, fbUser = null, fbReady = false, fbSyncTimer = null;
+
+function fbInit(){
+  try{
+    if(typeof firebase === "undefined"){return;}
+    firebase.initializeApp(FB_CONFIG);
+    fbAuth = firebase.auth();
+    fbDb = firebase.firestore();
+    fbReady = true;
+    fbAuth.onAuthStateChanged(function(user){
+      fbUser = user;
+      if(user){
+        hideLoginScreen();
+        updAccountUI();
+        fsOnLogin();
+      } else {
+        updAccountUI();
+        // Show login unless user chose to skip
+        var skipped = false;
+        try{skipped = localStorage.getItem("forge_skip_login")==="1";}catch(e){}
+        if(!skipped) showLoginScreen();
+      }
+    });
+    // Handle redirect result (Google fallback flow)
+    fbAuth.getRedirectResult().catch(function(err){
+      if(err && err.code !== "auth/no-auth-event") showLoginError(fbErrorMsg(err));
+    });
+  }catch(e){}
+}
+
+function showLoginScreen(){
+  var el = document.getElementById("login-screen");
+  if(el) el.style.display = "block";
+}
+function hideLoginScreen(){
+  var el = document.getElementById("login-screen");
+  if(el) el.style.display = "none";
+}
+function showLoginError(msg){
+  var el = document.getElementById("login-error");
+  if(el){el.textContent = msg;el.style.display = "block";}
+  var ld = document.getElementById("login-loading");
+  if(ld) ld.style.display = "none";
+}
+function showLoginLoading(){
+  var el = document.getElementById("login-error");
+  if(el) el.style.display = "none";
+  var ld = document.getElementById("login-loading");
+  if(ld) ld.style.display = "block";
+}
+
+function fbErrorMsg(err){
+  var c = err && err.code ? err.code : "";
+  if(c==="auth/invalid-email") return "E-mail invalido.";
+  if(c==="auth/user-not-found") return "Conta nao encontrada. Toque em CRIAR CONTA para se cadastrar.";
+  if(c==="auth/wrong-password"||c==="auth/invalid-credential"||c==="auth/invalid-login-credentials") return "E-mail ou senha incorretos.";
+  if(c==="auth/email-already-in-use") return "Este e-mail ja tem conta. Toque em ENTRAR.";
+  if(c==="auth/weak-password") return "Senha muito fraca. Use no minimo 6 caracteres.";
+  if(c==="auth/too-many-requests") return "Muitas tentativas. Aguarde alguns minutos.";
+  if(c==="auth/network-request-failed") return "Sem conexao. Verifique sua internet.";
+  if(c==="auth/popup-closed-by-user"||c==="auth/cancelled-popup-request") return "Login cancelado.";
+  if(c==="auth/popup-blocked") return "Popup bloqueado. Tentando outro metodo...";
+  return "Erro ao entrar. Tente novamente." + (c?" ("+c+")":"");
+}
+
+function fbLoginGoogle(){
+  if(!fbReady){showLoginError("Firebase nao carregou. Verifique a conexao e recarregue.");return;}
+  showLoginLoading();
+  var provider = new firebase.auth.GoogleAuthProvider();
+  fbAuth.signInWithPopup(provider).catch(function(err){
+    if(err && (err.code==="auth/popup-blocked"||err.code==="auth/operation-not-supported-in-this-environment"||err.code==="auth/cancelled-popup-request")){
+      // PWA iOS fallback
+      fbAuth.signInWithRedirect(provider).catch(function(e2){showLoginError(fbErrorMsg(e2));});
+    } else {
+      showLoginError(fbErrorMsg(err));
+    }
+  });
+}
+
+function fbLoginEmail(){
+  if(!fbReady){showLoginError("Firebase nao carregou. Verifique a conexao e recarregue.");return;}
+  var em = document.getElementById("login-email");
+  var pw = document.getElementById("login-pass");
+  var email = em?em.value.trim():"";
+  var pass = pw?pw.value:"";
+  if(!email||!pass){showLoginError("Preencha e-mail e senha.");return;}
+  showLoginLoading();
+  fbAuth.signInWithEmailAndPassword(email, pass).catch(function(err){showLoginError(fbErrorMsg(err));});
+}
+
+function fbSignupEmail(){
+  if(!fbReady){showLoginError("Firebase nao carregou. Verifique a conexao e recarregue.");return;}
+  var em = document.getElementById("login-email");
+  var pw = document.getElementById("login-pass");
+  var email = em?em.value.trim():"";
+  var pass = pw?pw.value:"";
+  if(!email||!pass){showLoginError("Preencha e-mail e senha para criar a conta.");return;}
+  showLoginLoading();
+  fbAuth.createUserWithEmailAndPassword(email, pass).catch(function(err){showLoginError(fbErrorMsg(err));});
+}
+
+function fbLogout(){
+  if(fbAuth) fbAuth.signOut();
+  try{localStorage.removeItem("forge_skip_login");}catch(e){}
+}
+
+// ---- FIRESTORE SYNC ----
+function fsCollectData(){
+  return {
+    treino: {cats:cats,lib:lib,logs:logs,cardio:clogs,schedule:schedule,theme:curTheme},
+    proto: {protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded},
+    nutri: {meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,antroLog:antroLog,weightLog:weightLog,bodyProfile:bodyProfile}
+  };
+}
+
+function fsSaveAll(){
+  if(!fbReady||!fbUser||!fbDb) return;
+  try{
+    var d = fsCollectData();
+    var base = fbDb.collection("users").doc(fbUser.uid);
+    var ts = Date.now();
+    base.set({email:fbUser.email||"",updatedAt:ts},{merge:true});
+    base.collection("appdata").doc("treino").set({json:JSON.stringify(d.treino),updatedAt:ts});
+    base.collection("appdata").doc("proto").set({json:JSON.stringify(d.proto),updatedAt:ts});
+    base.collection("appdata").doc("nutri").set({json:JSON.stringify(d.nutri),updatedAt:ts});
+  }catch(e){}
+}
+
+function fsScheduleSave(){
+  // Debounce cloud writes
+  if(fbSyncTimer) clearTimeout(fbSyncTimer);
+  fbSyncTimer = setTimeout(fsSaveAll, 2500);
+}
+
+function fsApplyTreino(d){
+  if(d.cats){cats=d.cats;sls("t5_cats",cats);}
+  if(d.lib){lib=d.lib;sls("t5_lib",lib);}
+  if(d.logs){logs=d.logs;sls("t5_logs",logs);}
+  if(d.cardio){clogs=d.cardio;sls("t5_cardio",clogs);}
+  if(d.schedule){schedule=d.schedule;sls("t5_schedule",schedule);}
+  if(d.theme){curTheme=d.theme;sls("t5_theme",curTheme);applyTheme(curTheme);}
+}
+function fsApplyProto(d){
+  if(d.protoItems){protoItems=d.protoItems;sls("forge_items",protoItems);}
+  if(d.protoCycles){protoCycles=d.protoCycles;sls("forge_cycles",protoCycles);}
+  if(d.protoDoses){protoDoses=d.protoDoses;sls("forge_doses",protoDoses);}
+  if(d.protoConcluded){protoConcluded=d.protoConcluded;sls("forge_concluded",protoConcluded);}
+}
+function fsApplyNutri(d){
+  if(d.meals){meals=d.meals;sls("forge_meals",meals);}
+  if(d.mealChecks){mealChecks=d.mealChecks;sls("forge_meal_checks",mealChecks);}
+  if(d.waterLog){waterLog=d.waterLog;sls("forge_water",waterLog);}
+  if(d.waterGoal){waterGoal=d.waterGoal;sls("forge_water_goal",waterGoal);}
+  if(d.waterHistory){waterHistory=d.waterHistory;sls("forge_water_hist",waterHistory);}
+  if(d.antroLog){antroLog=d.antroLog;sls("forge_antro",antroLog);}
+  if(d.weightLog){weightLog=d.weightLog;sls("forge_weights",weightLog);}
+  if(d.bodyProfile){bodyProfile=d.bodyProfile;sls("forge_profile",bodyProfile);}
+}
+
+function fsOnLogin(){
+  // On login: if cloud has data -> cloud wins (apply locally). If cloud empty -> migrate local up.
+  if(!fbReady||!fbUser||!fbDb) return;
+  try{
+    var base = fbDb.collection("users").doc(fbUser.uid);
+    base.collection("appdata").get().then(function(snap){
+      if(snap.empty){
+        // First login: migrate local data to cloud
+        fsSaveAll();
+        return;
+      }
+      var found = false;
+      snap.forEach(function(doc){
+        try{
+          var d = JSON.parse(doc.data().json||"{}");
+          if(doc.id==="treino"){fsApplyTreino(d);found=true;}
+          else if(doc.id==="proto"){fsApplyProto(d);found=true;}
+          else if(doc.id==="nutri"){fsApplyNutri(d);found=true;}
+        }catch(e){}
+      });
+      if(found){
+        // Re-render everything with cloud data
+        try{renderDashboard();}catch(e){}
+        try{renderChips();}catch(e){}
+        try{if(curPage==="log")renderLog();}catch(e){}
+        try{if(curPage==="proto")renderProto();}catch(e){}
+        try{if(curPage==="nutri")renderNutri();}catch(e){}
+      }
+    }).catch(function(e){});
+  }catch(e){}
+}
+
+function updAccountUI(){
+  var st = document.getElementById("account-status");
+  var lo = document.getElementById("btn-account-logout");
+  var li = document.getElementById("btn-account-login");
+  if(!st) return;
+  if(fbUser){
+    st.innerHTML = "Conectado como <span style='color:var(--accent);font-weight:700'>"+(fbUser.email||fbUser.displayName||"usuario")+"</span><br><span style='font-size:9px;color:#10D9A0'>Dados sincronizados na nuvem</span>";
+    if(lo) lo.style.display = "block";
+    if(li) li.style.display = "none";
+  } else {
+    st.innerHTML = "<span style='color:#FB923C'>Sem conta - dados apenas neste aparelho</span>";
+    if(lo) lo.style.display = "none";
+    if(li) li.style.display = "block";
+  }
+}
+
 var editAntroId = null;
 var antroChartMetric = "peso";
 var antroCustomFields = []; // temp custom fields in modal
