@@ -3526,11 +3526,22 @@ var FB_CONFIG = {
 };
 var fbAuth = null, fbDb = null, fbUser = null, fbReady = false, fbSyncTimer = null;
 
+var fbInitTries = 0;
 function fbInit(){
+  // Wait for the SDK scripts (may load slowly); retry up to ~8s
+  if(typeof firebase === "undefined"){
+    fbInitTries++;
+    if(fbInitTries < 40){
+      setTimeout(fbInit, 200);
+    } else {
+      fbShowInitError("O modulo de login nao carregou. Verifique sua conexao (ou bloqueadores de conteudo) e recarregue o app.");
+    }
+    return;
+  }
   try{
-    if(typeof firebase === "undefined"){return;}
     firebase.initializeApp(FB_CONFIG);
     fbAuth = firebase.auth();
+    try{fbAuth.useDeviceLanguage();}catch(e){}
     fbDb = firebase.firestore();
     fbReady = true;
     fbAuth.onAuthStateChanged(function(user){
@@ -3541,17 +3552,24 @@ function fbInit(){
         fsOnLogin();
       } else {
         updAccountUI();
-        // Show login unless user chose to skip
         var skipped = false;
         try{skipped = localStorage.getItem("forge_skip_login")==="1";}catch(e){}
         if(!skipped) showLoginScreen();
       }
     });
-    // Handle redirect result (Google fallback flow)
     fbAuth.getRedirectResult().catch(function(err){
       if(err && err.code !== "auth/no-auth-event") showLoginError(fbErrorMsg(err));
     });
-  }catch(e){}
+  }catch(e){
+    fbShowInitError("Erro ao iniciar o login: " + (e && e.code ? e.code : (e && e.message ? e.message : "desconhecido")));
+  }
+}
+
+function fbShowInitError(msg){
+  var st = document.getElementById("account-status");
+  if(st) st.innerHTML = "<span style='color:#FB5C73'>" + msg + "</span>";
+  showLoginScreen();
+  showLoginError(msg);
 }
 
 function showLoginScreen(){
