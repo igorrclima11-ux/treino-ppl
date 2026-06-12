@@ -887,9 +887,7 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
   </div>
 </div>
 
-<script src="sdk-app.js"></script>
-<script src="sdk-auth.js"></script>
-<script src="sdk-store.js"></script>
+<script src="forge-fb.js"></script>
 <script>
 var COLORS = ["#22D3EE","#FB5C73","#FCD34D","#B575F9","#10D9A0","#FB923C","#3B82F6","#F472B6","#34D399","#A78BFA","#F87171","#2DD4BF"];
 var MG = ["Peito","Costas","Ombro","Biceps","Triceps","Pernas","Gluteos","Abdomen","Antebraco","Trapezio","Livre"];
@@ -3060,7 +3058,7 @@ try{scheduleItemNotifs();}catch(e){}
 // Try to restore Google Drive session automatically
 setTimeout(function(){gdRestoreSession();}, 1500);
 // Firebase init + login wiring
-fbInit();
+setTimeout(fbInit, 0);
 (function(){var b=document.getElementById("btn-login-google");if(b)b.onclick=fbLoginGoogle;})();
 (function(){var b=document.getElementById("btn-login-email");if(b)b.onclick=fbLoginEmail;})();
 (function(){var b=document.getElementById("btn-signup-email");if(b)b.onclick=fbSignupEmail;})();
