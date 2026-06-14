@@ -21,33 +21,24 @@
 }
 /* Ocean (default) - refined deep teal-blue */
 :root{--bg:#070B12;--bg2:#0D1420;--bg3:#0A101A;--card-border:rgba(0,229,255,0.08);--accent:#22D3EE;--accent2:#0EA5E9;--radial:rgba(34,211,238,0.05)}
-/* Midnight - pure monochrome elegance */
+/* Midnight - dark profundo, preto absoluto minimalista */
 body.theme-midnight{--bg:#000;--bg2:#0C0C0C;--bg3:#070707;--card-border:rgba(255,255,255,0.1);--accent:#FAFAFA;--accent2:#A1A1AA;--radial:rgba(255,255,255,0.035)}
-/* Forest - rich emerald */
-body.theme-forest{--bg:#06110C;--bg2:#0C1B13;--bg3:#08140E;--card-border:rgba(16,185,129,0.1);--accent:#10D9A0;--accent2:#34D399;--radial:rgba(16,217,160,0.05)}
-/* Ember - warm amber/orange */
-body.theme-carbon{--bg:#0E0A07;--bg2:#1A130C;--bg3:#140E08;--card-border:rgba(251,146,60,0.1);--accent:#FB923C;--accent2:#F59E0B;--radial:rgba(251,146,60,0.055)}
-/* Violet - vivid purple */
-body.theme-violet{--bg:#0A0712;--bg2:#150E20;--bg3:#100A18;--card-border:rgba(168,85,247,0.12);--accent:#B575F9;--accent2:#E879F9;--radial:rgba(181,117,249,0.06)}
-/* Crimson - bold red */
-body.theme-crimson{--bg:#0F0709;--bg2:#1C0D11;--bg3:#15090C;--card-border:rgba(244,63,94,0.12);--accent:#FB5C73;--accent2:#F43F5E;--radial:rgba(251,92,115,0.055)}
-/* Gold - luxury gold */
-body.theme-gold{--bg:#0D0B05;--bg2:#19150A;--bg3:#130F07;--card-border:rgba(234,179,8,0.12);--accent:#FCD34D;--accent2:#EAB308;--radial:rgba(252,211,77,0.05)}
-/* Rose - soft pink */
-body.theme-rose{--bg:#0F080C;--bg2:#1C0E16;--bg3:#150A10;--card-border:rgba(244,114,182,0.12);--accent:#F9A8D4;--accent2:#EC4899;--radial:rgba(249,168,212,0.055)}
-/* Slate - cool blue-grey professional */
-body.theme-slate{--bg:#080A0E;--bg2:#101620;--bg3:#0C1118;--card-border:rgba(148,163,184,0.12);--accent:#94A3B8;--accent2:#64748B;--radial:rgba(148,163,184,0.04)}
-/* === TEMATICOS === */
-/* Brasil - verde e amarelo */
-body.theme-brasil{--bg:#06120A;--bg2:#0C1E12;--bg3:#08160D;--card-border:rgba(255,223,0,0.12);--accent:#FFDF00;--accent2:#009C3B;--radial:rgba(0,156,59,0.06)}
-/* Beast - preto e vermelho sangue (intensidade) */
-body.theme-beast{--bg:#0C0606;--bg2:#180B0B;--bg3:#120808;--card-border:rgba(220,38,38,0.14);--accent:#EF4444;--accent2:#991B1B;--radial:rgba(239,68,68,0.06)}
-/* Olympia - dourado e preto (palco/competicao) */
-body.theme-olympia{--bg:#0B0905;--bg2:#16120A;--bg3:#100C06;--card-border:rgba(212,175,55,0.15);--accent:#D4AF37;--accent2:#9A7B1F;--radial:rgba(212,175,55,0.06)}
-/* Neon - verde acido vibrante (gym moderno) */
+/* Neon - verde acido vibrante (o diferentao) */
 body.theme-neon{--bg:#070A07;--bg2:#0E140E;--bg3:#0A0F0A;--card-border:rgba(163,255,0,0.14);--accent:#A3FF00;--accent2:#65D700;--radial:rgba(163,255,0,0.06)}
-/* Royal - azul royal e prata */
-body.theme-royal{--bg:#06080F;--bg2:#0C1020;--bg3:#080B18;--card-border:rgba(96,165,250,0.13);--accent:#60A5FA;--accent2:#3B82F6;--radial:rgba(96,165,250,0.06)}
+/* Light - tema claro de verdade */
+body.theme-light{--bg:#F4F5F7;--bg2:#FFFFFF;--bg3:#FAFBFC;--card-border:rgba(0,0,0,0.1);--accent:#0E7490;--accent2:#0891B2;--radial:rgba(14,116,144,0.04)}
+/* Light theme readability overrides - remap hardcoded dark-mode text colors */
+body.theme-light{color:#1A1A2E}
+body.theme-light .nav-bar{background:rgba(255,255,255,0.95);border-top-color:rgba(0,0,0,0.08)}
+body.theme-light [style*="color:#E8E8F0"]{color:#1A1A2E !important}
+body.theme-light [style*="color:#DDD"]{color:#2A2A3A !important}
+body.theme-light [style*="color:#CCC"]{color:#333 !important}
+body.theme-light [style*="color:#AAA"]{color:#555 !important}
+body.theme-light [style*="color:#888"]{color:#666 !important}
+body.theme-light [style*="color:#666"]{color:#777 !important}
+body.theme-light [style*="color:#555"]{color:#888 !important}
+body.theme-light input,body.theme-light select,body.theme-light textarea{color:#1A1A2E !important}
+body.theme-light .set-inp{color:#1A1A2E !important}
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
@@ -125,8 +116,9 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
 
 /* ── MODALS ── */
 .modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:flex-end;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
 .modal-bg.show{display:flex}
-.modal-sh{width:100%;background:linear-gradient(180deg,var(--bg2),var(--bg3));border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,0.08);padding:24px 18px 40px;max-height:91vh;overflow-y:auto;animation:fadeSlideUp 0.28s ease both}
+.modal-sh{width:100%;background:linear-gradient(180deg,var(--bg2),var(--bg3));border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,0.08);padding:24px 18px 40px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadeSlideUp 0.28s ease both}
 .tinp{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-sm);color:#DDD;font-size:13px;padding:12px 14px;width:100%;outline:none;transition:border-color 0.2s}
 .tinp:focus{border-color:rgba(0,229,255,0.3)}
 .conf-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -657,6 +649,27 @@ textarea:focus{border-color:rgba(0,229,255,0.3);color:#CCC}
   </div>
 </div>
 
+<!-- MODAL: LIBRARY EXERCISE EDIT -->
+<div class="modal-bg" id="lib-edit-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px">Editar Exercicio</div>
+      <button class="xbtn" id="btn-close-lib-edit">X</button>
+    </div>
+    <div class="slabel">NOME</div>
+    <input class="tinp" id="lib-edit-name" placeholder="Ex: Supino Inclinado c/ Halter" style="margin-bottom:12px"/>
+    <div class="slabel">GRUPO MUSCULAR</div>
+    <select id="lib-edit-group" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#DDD;font-size:12px;padding:11px;outline:none;font-family:inherit;margin-bottom:12px"></select>
+    <div class="slabel">TIPO</div>
+    <div style="display:flex;gap:5px;margin-bottom:16px">
+      <button id="lib-edit-type-carga" style="flex:1;padding:9px;border-radius:8px;border:1px solid;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit">Carga</button>
+      <button id="lib-edit-type-repeticao" style="flex:1;padding:9px;border-radius:8px;border:1px solid;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit">Repeticao</button>
+      <button id="lib-edit-type-tempo" style="flex:1;padding:9px;border-radius:8px;border:1px solid;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit">Tempo</button>
+    </div>
+    <button id="btn-save-lib-edit" style="width:100%;padding:13px;border-radius:11px;background:var(--accent);color:#000;border:none;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;font-family:inherit">SALVAR</button>
+  </div>
+</div>
+
 <!-- MODAL: PROGRAM EDIT -->
 <div class="modal-bg" id="program-modal">
   <div class="modal-sh">
@@ -1053,6 +1066,8 @@ var schedule=gls("t5_schedule",{});
 // MULTI-PROGRAM SYSTEM
 var programs=gls("forge_programs",null);
 var editProgramId=null;
+var editLibExId=null;
+var libEditType="carga";
 var pendingProgramDelete=null;
 var progTempPlan={};
 var progHasDeadline=false;
@@ -1069,6 +1084,32 @@ if(programs===null){
   }];
   sls("forge_programs",programs);
 }
+function updateBodyScrollLock(){
+  // Lock body scroll if any modal/overlay is currently visible
+  var anyOpen = false;
+  var overlays = document.querySelectorAll(".modal-bg, .conf-bg");
+  for(var i=0;i<overlays.length;i++){
+    var el = overlays[i];
+    // visible if it has "show" class OR computed display is not none
+    if(el.className.indexOf("show")>-1){anyOpen=true;break;}
+    var disp = el.style.display;
+    if(disp && disp!=="none"){anyOpen=true;break;}
+  }
+  // login-screen is a special overlay
+  var ls = document.getElementById("login-screen");
+  if(ls && ls.style.display==="block") anyOpen=true;
+  var body = document.body;
+  if(anyOpen){
+    if(body.className.indexOf("modal-open")===-1){
+      body.className = (body.className+" modal-open").trim();
+    }
+  } else {
+    if(body.className.indexOf("modal-open")>-1){
+      body.className = body.className.replace(/\s*modal-open/g,"").trim();
+    }
+  }
+}
+
 function getActiveProgram(){
   for(var i=0;i<programs.length;i++){if(programs[i].ativo)return programs[i];}
   return null;
@@ -1083,6 +1124,8 @@ function syncScheduleFromProgram(){
 (function(){syncScheduleFromProgram();})();
 
 var curTheme=gls("t5_theme","default");
+// Migrate removed themes to default
+(function(){var valid=["default","midnight","neon","light"];var ok=false;for(var i=0;i<valid.length;i++){if(curTheme===valid[i])ok=true;}if(!ok){curTheme="default";sls("t5_theme","default");}})();
 // Notifications config: {enabled, hour, min}
 var notifCfg=gls("t5_notif",{enabled:false,hour:7,min:0});
 var sessData={};
@@ -2409,18 +2452,8 @@ function renderThemePicker(){
   var themes=[
     {id:"default",name:"Ocean",bg:"#070B12",accent:"#22D3EE"},
     {id:"midnight",name:"Midnight",bg:"#000000",accent:"#FAFAFA"},
-    {id:"forest",name:"Forest",bg:"#06110C",accent:"#10D9A0"},
-    {id:"carbon",name:"Ember",bg:"#0E0A07",accent:"#FB923C"},
-    {id:"violet",name:"Violet",bg:"#0A0712",accent:"#B575F9"},
-    {id:"crimson",name:"Crimson",bg:"#0F0709",accent:"#FB5C73"},
-    {id:"gold",name:"Gold",bg:"#0D0B05",accent:"#FCD34D"},
-    {id:"rose",name:"Rose",bg:"#0F080C",accent:"#F9A8D4"},
-    {id:"slate",name:"Slate",bg:"#080A0E",accent:"#94A3B8"},
-    {id:"brasil",name:"Brasil",bg:"#06120A",accent:"#FFDF00"},
-    {id:"beast",name:"Beast",bg:"#0C0606",accent:"#EF4444"},
-    {id:"olympia",name:"Olympia",bg:"#0B0905",accent:"#D4AF37"},
     {id:"neon",name:"Neon",bg:"#070A07",accent:"#A3FF00"},
-    {id:"royal",name:"Royal",bg:"#06080F",accent:"#60A5FA"}
+    {id:"light",name:"Light",bg:"#F4F5F7",accent:"#0E7490"}
   ];
   for(var i=0;i<themes.length;i++){
     (function(th){
@@ -3241,20 +3274,83 @@ function renderLibCfg(){
     var grp=MG[g];var items=[];for(var i=0;i<lib.length;i++){if(lib[i].group===grp)items.push(lib[i]);}
     if(!items.length)continue;
     var sec=document.createElement("div");sec.style.cssText="border-bottom:1px solid #0F0F1A";
-    var sh=document.createElement("div");sh.style.cssText="padding:6px 13px;font-size:8px;color:#A855F7;letter-spacing:2px;background:rgba(168,85,247,.05)";sh.textContent=grp.toUpperCase();sec.appendChild(sh);
+    var sh=document.createElement("div");sh.style.cssText="padding:6px 13px;font-size:8px;color:var(--accent);letter-spacing:2px;background:rgba(34,211,238,.05)";sh.textContent=grp.toUpperCase();sec.appendChild(sh);
     for(var i=0;i<items.length;i++){
       (function(ex){
         var row=document.createElement("div");row.className="cfg-row";row.style.padding="7px 13px";
-        var inf=document.createElement("div");inf.style.flex="1";inf.innerHTML="<div style='font-size:10px;color:#CCC'>"+ex.name+"</div><div style='font-size:8px;color:#555;margin-top:1px'>"+(ex.sets||3)+"x"+(ex.reps||10)+"</div>";
+        var typeLabel=ex.type==="tempo"?" - tempo":ex.type==="repeticao"?" - reps":"";
+        var inf=document.createElement("div");inf.style.flex="1";inf.innerHTML="<div style='font-size:10px;color:#CCC'>"+ex.name+"</div><div style='font-size:8px;color:#555;margin-top:1px'>"+(ex.sets||3)+"x"+(ex.reps||10)+typeLabel+"</div>";
         row.appendChild(inf);
-        var isD=ex.id.indexOf("lb")===0;
-        if(!isD){var db=document.createElement("button");db.className="xbtn";db.style.cssText="border-color:rgba(255,61,113,.3);color:#FF3D71";db.textContent="X";db.onclick=function(){lib=lib.filter(function(e){return e.id!==ex.id;});sls("t5_lib",lib);renderLibCfg();};row.appendChild(db);}
-        else{var lbl=document.createElement("span");lbl.style.cssText="font-size:8px;color:#333";lbl.textContent="padrao";row.appendChild(lbl);}
+        // Edit button for ALL exercises (including defaults)
+        var eb=document.createElement("button");eb.className="xbtn";eb.style.cssText="border-color:rgba(255,255,255,.1);color:#888;margin-right:6px";eb.textContent="Editar";
+        eb.onclick=function(){openLibEditModal(ex.id);};
+        row.appendChild(eb);
+        // Delete button (defaults can be deleted too now, user choice)
+        var db=document.createElement("button");db.className="xbtn";db.style.cssText="border-color:rgba(255,61,113,.3);color:#FF3D71";db.textContent="X";
+        db.onclick=function(){lib=lib.filter(function(e){return e.id!==ex.id;});sls("t5_lib",lib);renderLibCfg();try{fsScheduleSave();}catch(e){}};
+        row.appendChild(db);
         sec.appendChild(row);
       })(items[i]);
     }
     el.appendChild(sec);
   }
+}
+
+function openLibEditModal(exId){
+  var ex=null;
+  for(var i=0;i<lib.length;i++){if(lib[i].id===exId){ex=lib[i];break;}}
+  if(!ex)return;
+  editLibExId=exId;
+  var nameInp=document.getElementById("lib-edit-name");
+  var grpSel=document.getElementById("lib-edit-group");
+  if(nameInp)nameInp.value=ex.name;
+  if(grpSel){
+    grpSel.innerHTML="";
+    for(var g=0;g<MG.length;g++){
+      var opt=document.createElement("option");
+      opt.value=MG[g];opt.textContent=MG[g];
+      if(ex.group===MG[g])opt.selected=true;
+      grpSel.appendChild(opt);
+    }
+  }
+  libEditType=ex.type||"carga";
+  updLibEditTypeBtns();
+  document.getElementById("lib-edit-modal").className="modal-bg show";
+}
+
+function updLibEditTypeBtns(){
+  var types=["carga","repeticao","tempo"];
+  for(var i=0;i<types.length;i++){
+    var b=document.getElementById("lib-edit-type-"+types[i]);
+    if(b){
+      var sel=libEditType===types[i];
+      b.style.background=sel?"var(--accent)22":"rgba(255,255,255,0.04)";
+      b.style.color=sel?"var(--accent)":"#555";
+      b.style.borderColor=sel?"var(--accent)":"rgba(255,255,255,0.08)";
+    }
+  }
+}
+
+function saveLibEdit(){
+  if(!editLibExId)return;
+  var nameInp=document.getElementById("lib-edit-name");
+  var grpSel=document.getElementById("lib-edit-group");
+  var name=nameInp?nameInp.value.trim():"";
+  if(!name){alert("Coloque um nome.");return;}
+  for(var i=0;i<lib.length;i++){
+    if(lib[i].id===editLibExId){
+      lib[i].name=name;
+      if(grpSel)lib[i].group=grpSel.value;
+      lib[i].type=libEditType;
+      if(libEditType==="tempo"&&!lib[i].time)lib[i].time=60;
+      break;
+    }
+  }
+  sls("t5_lib",lib);
+  editLibExId=null;
+  document.getElementById("lib-edit-modal").className="modal-bg";
+  renderLibCfg();
+  try{fsScheduleSave();}catch(e){}
 }
 
 function openLibModal(){selMG=MG[0];document.getElementById("lib-ex-name").value="";renderMG();document.getElementById("lib-add-modal").className="modal-bg show";}
@@ -3420,6 +3516,8 @@ setTimeout(fbInit, 0);
 setTimeout(function(){checkDraft();}, 800);
 // Periodic wake lock check during workouts
 setInterval(ensureWakeLock, 10000);
+// Body scroll lock watcher - prevents background page from competing with modals
+setInterval(updateBodyScrollLock, 150);
 
 // -- GOOGLE DRIVE SYNC --------------------------------------------------------
 var GD_CLIENT_ID = "159708581666-cb2eskdm3sqauj2jc1nf10q1s94fvesa.apps.googleusercontent.com";
@@ -3815,6 +3913,12 @@ document.getElementById("proto-cycle-modal").onclick = function(e){if(e.target==
 document.getElementById("nav-proto").onclick = function(){setPage("proto");};
 (function(){var b=document.getElementById("nav-nutri");if(b)b.onclick=function(){setPage("nutri");};})();
 (function(){var b=document.getElementById("btn-new-program");if(b)b.onclick=function(){openProgramModal(null);};})();
+(function(){var b=document.getElementById("btn-close-lib-edit");if(b)b.onclick=function(){document.getElementById("lib-edit-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("btn-save-lib-edit");if(b)b.onclick=saveLibEdit;})();
+(function(){var b=document.getElementById("lib-edit-type-carga");if(b)b.onclick=function(){libEditType="carga";updLibEditTypeBtns();};})();
+(function(){var b=document.getElementById("lib-edit-type-repeticao");if(b)b.onclick=function(){libEditType="repeticao";updLibEditTypeBtns();};})();
+(function(){var b=document.getElementById("lib-edit-type-tempo");if(b)b.onclick=function(){libEditType="tempo";updLibEditTypeBtns();};})();
+(function(){var b=document.getElementById("lib-edit-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
 (function(){var b=document.getElementById("btn-close-program");if(b)b.onclick=function(){document.getElementById("program-modal").className="modal-bg";};})();
 (function(){var b=document.getElementById("btn-save-program");if(b)b.onclick=saveProgram;})();
 (function(){var b=document.getElementById("prog-deadline-toggle");if(b)b.onclick=function(){progHasDeadline=!progHasDeadline;updProgDeadlineUI();};})();
@@ -4260,107 +4364,19 @@ function renderDashWeekSummary(){
   var el = document.getElementById("dash-week-summary");
   if(!el) return;
   el.innerHTML = "";
-  // Active program banner (if has deadline)
+  // Active program banner (if has deadline) - the only thing kept here
   var ap = getActiveProgram();
   if(ap && ap.duracaoSemanas){
     var wk = getProgramWeek(ap);
     if(wk){
       var progBanner = document.createElement("div");
-      progBanner.style.cssText = "background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--accent)33;border-radius:var(--r-md);padding:10px 13px;margin-bottom:10px";
+      progBanner.style.cssText = "background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--accent)33;border-radius:var(--r-md);padding:10px 13px;margin-bottom:6px";
       var pct = Math.min(100, Math.round((wk.current/wk.total)*100));
       progBanner.innerHTML = "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:7px'><span style='font-size:11px;font-weight:800;color:var(--accent)'>"+ap.nome+"</span><span style='font-size:10px;color:#888;font-weight:600'>"+(wk.done?"Concluido":"Semana "+wk.current+"/"+wk.total)+"</span></div><div style='height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden'><div style='height:100%;width:"+pct+"%;background:"+(wk.done?"#10D9A0":"var(--accent)")+";border-radius:3px'></div></div>";
       el.appendChild(progBanner);
     }
   }
-  // Week boundaries (Sunday to Saturday, current week)
-  var now = new Date();
-  var weekStart = new Date(now);
-  weekStart.setDate(now.getDate() - now.getDay());
-  var wsStr = weekStart.getFullYear()+"-"+pad(weekStart.getMonth()+1)+"-"+pad(weekStart.getDate());
-  var todayStr = today();
-
-  // 1. Treinos da semana (realizados / planejados)
-  var doneCount = 0;
-  var doneDates = {};
-  for(var i=0;i<logs.length;i++){
-    if(logs[i].date>=wsStr && logs[i].date<=todayStr && !doneDates[logs[i].date]){
-      doneDates[logs[i].date]=1; doneCount++;
-    }
-  }
-  // Planned days this week (from schedule)
-  var plannedCount = 0;
-  if(schedule){
-    for(var d=0;d<7;d++){if(schedule[d])plannedCount++;}
-  }
-
-  // 2. Protocolo da semana (% de aderencia dos dias passados)
-  var protoExpected = 0, protoTaken = 0;
-  for(var dd=0;dd<=now.getDay();dd++){
-    var cd = new Date(weekStart);cd.setDate(weekStart.getDate()+dd);
-    var cdStr = cd.getFullYear()+"-"+pad(cd.getMonth()+1)+"-"+pad(cd.getDate());
-    var cdDow = cd.getDay();
-    for(var pi=0;pi<protoItems.length;pi++){
-      var it = protoItems[pi];
-      var due = false;
-      if(it.freq==="diario") due=true;
-      else if(it.freq==="semanal"&&it.days&&it.days.indexOf(cdDow)>-1) due=true;
-      if(!due) continue;
-      protoExpected++;
-      for(var di=0;di<protoDoses.length;di++){
-        if(protoDoses[di].itemId===it.id&&protoDoses[di].date===cdStr){protoTaken++;break;}
-      }
-    }
-  }
-  var protoPct = protoExpected>0 ? Math.round((protoTaken/protoExpected)*100) : null;
-
-  // 3. Agua - dias da semana que bateu a meta
-  var waterDays = 0, waterTotal = 0;
-  for(var wd=0;wd<=now.getDay();wd++){
-    var wdate = new Date(weekStart);wdate.setDate(weekStart.getDate()+wd);
-    var wStr = wdate.getFullYear()+"-"+pad(wdate.getMonth()+1)+"-"+pad(wdate.getDate());
-    waterTotal++;
-    if((waterLog[wStr]||0)>=waterGoal)waterDays++;
-  }
-
-  // Skip if nothing to show
-  if(doneCount===0 && protoPct===null && waterDays===0) return;
-
-  var card = document.createElement("div");
-  card.style.cssText = "display:flex;gap:7px";
-
-  // Treino chip
-  var tColor = plannedCount>0&&doneCount>=plannedCount?"#10D9A0":doneCount>0?"var(--accent)":"#555";
-  var tChip = document.createElement("div");
-  tChip.style.cssText = "flex:1;background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:var(--r-md);padding:9px 6px;text-align:center";
-  tChip.innerHTML = "<div style='font-size:15px;font-weight:800;color:"+tColor+"'>"+doneCount+(plannedCount>0?"<span style='font-size:10px;color:#555'>/"+plannedCount+"</span>":"")+"</div><div style='font-size:7px;color:#555;letter-spacing:1px;margin-top:1px'>TREINOS</div>";
-  card.appendChild(tChip);
-
-  // Protocolo chip
-  if(protoPct!==null){
-    var pColor = protoPct>=80?"#10D9A0":protoPct>=50?"#FB923C":"#FB5C73";
-    var pChip = document.createElement("div");
-    pChip.style.cssText = "flex:1;background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:var(--r-md);padding:9px 6px;text-align:center";
-    pChip.innerHTML = "<div style='font-size:15px;font-weight:800;color:"+pColor+"'>"+protoPct+"%</div><div style='font-size:7px;color:#555;letter-spacing:1px;margin-top:1px'>PROTOCOLO</div>";
-    card.appendChild(pChip);
-  }
-
-  // Agua chip
-  var wColor = waterDays===waterTotal?"#10D9A0":waterDays>0?"#3B82F6":"#555";
-  var wChip = document.createElement("div");
-  wChip.style.cssText = "flex:1;background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:var(--r-md);padding:9px 6px;text-align:center";
-  wChip.innerHTML = "<div style='font-size:15px;font-weight:800;color:"+wColor+"'>"+waterDays+"<span style='font-size:10px;color:#555'>/"+waterTotal+"</span></div><div style='font-size:7px;color:#555;letter-spacing:1px;margin-top:1px'>AGUA</div>";
-  card.appendChild(wChip);
-
-  // Header label
-  var wrap = document.createElement("div");
-  var lbl = document.createElement("div");
-  lbl.style.cssText = "font-size:9px;color:#555;letter-spacing:1.5px;font-weight:600;margin-bottom:6px";
-  lbl.textContent = "ESSA SEMANA";
-  wrap.appendChild(lbl);
-  wrap.appendChild(card);
-  el.appendChild(wrap);
 }
-
 function renderDashDate(){
   var now = new Date();
   var dayEl = document.getElementById("dash-day");
