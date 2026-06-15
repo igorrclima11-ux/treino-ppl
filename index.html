@@ -389,6 +389,11 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
       <div id="account-status" style="font-size:11px;color:#888;margin-bottom:12px;line-height:1.6">Carregando...</div>
       <button id="btn-account-login" style="display:none;width:100%;padding:12px;border-radius:10px;background:var(--accent)22;border:1px solid var(--accent)44;color:var(--accent);font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:1px">ENTRAR / CRIAR CONTA</button>
       <button id="btn-account-logout" style="display:none;width:100%;padding:11px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#888;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">SAIR DA CONTA</button>
+    
+      <div style="margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:16px;justify-content:center">
+        <span id="cfg-link-terms" style="font-size:10px;color:#666;text-decoration:underline;cursor:pointer">Termos de Uso</span>
+        <span id="cfg-link-privacy" style="font-size:10px;color:#666;text-decoration:underline;cursor:pointer">Politica de Privacidade</span>
+      </div>
     </div>
   </div>
 
@@ -647,6 +652,41 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
       <button id="btn-share-evolution" style="flex:1;padding:12px;border-radius:10px;background:var(--accent)22;border:1px solid var(--accent)44;color:var(--accent);font-weight:700;font-size:10px;cursor:pointer;font-family:inherit;letter-spacing:1px">PRINT / SHARE</button>
     </div>
     <div style="font-size:8px;color:#333;text-align:center;margin-top:8px">Segure o botao PRINT para tirar print e compartilhar com seu personal</div>
+  </div>
+</div>
+
+<!-- MODAL: TERMS OF USE -->
+<div class="modal-bg" id="terms-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px">Termos de Uso</div>
+      <button class="xbtn" id="btn-close-terms">X</button>
+    </div>
+    <div style="font-size:11px;color:#AAA;line-height:1.7">
+      <p style="margin:0 0 12px"><b>O FORGE e uma ferramenta de registro pessoal de treinos.</b> Ele nao e um servico medico e nao substitui acompanhamento profissional.</p>
+      <p style="margin:0 0 12px"><b>Registro pessoal:</b> o app apenas registra as informacoes que voce insere (treinos, medidas, nutricao, anotacoes). Ele nao sugere, recomenda, calcula doses nem prescreve treinos, dietas ou substancias.</p>
+      <p style="margin:0 0 12px"><b>Sua responsabilidade:</b> qualquer decisao sobre treino, dieta ou uso de substancias e exclusivamente sua e deve ser acompanhada por profissionais de saude qualificados. O desenvolvedor nao se responsabiliza por consequencias dessas decisoes.</p>
+      <p style="margin:0 0 12px"><b>Conta e dados:</b> voce e responsavel por suas credenciais. Seus dados sao tratados conforme a Politica de Privacidade.</p>
+      <p style="margin:0 0 12px"><b>Idade:</b> o uso e destinado a maiores de 18 anos.</p>
+      <p style="margin:0;color:#666;font-size:10px">Este e um resumo. Ao aceitar, voce concorda com os Termos de Uso completos do FORGE.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PRIVACY POLICY -->
+<div class="modal-bg" id="privacy-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px">Politica de Privacidade</div>
+      <button class="xbtn" id="btn-close-privacy">X</button>
+    </div>
+    <div style="font-size:11px;color:#AAA;line-height:1.7">
+      <p style="margin:0 0 12px"><b>Seus dados sao seus.</b> Coletamos apenas o necessario: e-mail, identificacao da conta e as informacoes que voce registra no app.</p>
+      <p style="margin:0 0 12px"><b>Dados de saude:</b> medidas, peso e anotacoes que voce registrar sao tratados com seu consentimento e usados apenas para voce acompanhar seu proprio historico. Nao vendemos nem compartilhamos esses dados.</p>
+      <p style="margin:0 0 12px"><b>Armazenamento:</b> seus dados ficam no seu aparelho e, quando logado, na nuvem (Firebase/Google) para sincronizacao e backup. Cada usuario acessa somente os proprios dados.</p>
+      <p style="margin:0 0 12px"><b>Seus direitos (LGPD):</b> voce pode acessar, corrigir, exportar e excluir seus dados, e revogar o consentimento a qualquer momento.</p>
+      <p style="margin:0;color:#666;font-size:10px">Este e um resumo. Ao aceitar, voce concorda com a Politica de Privacidade completa do FORGE.</p>
+    </div>
   </div>
 </div>
 
@@ -923,6 +963,15 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
     <div style="text-align:center;margin-bottom:30px">
       <div style="font-size:38px;font-weight:900;letter-spacing:3px;color:var(--accent)">FORGE</div>
       <div style="font-size:11px;color:#555;margin-top:6px;letter-spacing:1px">Seu treino, sua evolucao</div>
+    </div>
+
+    <div id="consent-box" style="display:flex;align-items:flex-start;gap:9px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:11px;padding:12px 13px;margin-bottom:16px;cursor:pointer">
+      <div id="consent-check" style="width:20px;height:20px;border-radius:5px;border:2px solid rgba(255,255,255,0.25);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.15s">
+        <span id="consent-tick" style="color:#000;font-size:13px;font-weight:900;display:none">&#10003;</span>
+      </div>
+      <div style="font-size:10px;color:#999;line-height:1.5">
+        Li e aceito os <span id="link-terms" style="color:var(--accent);text-decoration:underline;font-weight:600">Termos de Uso</span> e a <span id="link-privacy" style="color:var(--accent);text-decoration:underline;font-weight:600">Politica de Privacidade</span>, e consinto com o tratamento dos meus dados, incluindo dados de saude que eu registrar.
+      </div>
     </div>
 
     <button id="btn-login-google" style="width:100%;padding:14px;border-radius:12px;background:#FFF;color:#1A1A1A;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
@@ -3525,9 +3574,22 @@ setTimeout(fbInit, 0);
 (function(){var b=document.getElementById("btn-login-email");if(b)b.onclick=fbLoginEmail;})();
 (function(){var b=document.getElementById("btn-signup-email");if(b)b.onclick=fbSignupEmail;})();
 (function(){var b=document.getElementById("btn-skip-login");if(b)b.onclick=function(){
+  if(!requireConsent())return;
+  recordConsent();
   try{localStorage.setItem("forge_skip_login","1");}catch(e){}
   hideLoginScreen();updAccountUI();
 };})();
+(function(){var b=document.getElementById("consent-box");if(b)b.onclick=function(e){
+  if(e.target&&(e.target.id==="link-terms"||e.target.id==="link-privacy"))return;
+  toggleConsent();
+};})();
+(function(){var b=document.getElementById("link-terms");if(b)b.onclick=function(e){e.stopPropagation();document.getElementById("terms-modal").className="modal-bg show";};})();
+(function(){var b=document.getElementById("link-privacy");if(b)b.onclick=function(e){e.stopPropagation();document.getElementById("privacy-modal").className="modal-bg show";};})();
+(function(){var b=document.getElementById("btn-close-terms");if(b)b.onclick=function(){document.getElementById("terms-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("btn-close-privacy");if(b)b.onclick=function(){document.getElementById("privacy-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("cfg-link-terms");if(b)b.onclick=function(){document.getElementById("terms-modal").className="modal-bg show";};})();
+(function(){var b=document.getElementById("cfg-link-privacy");if(b)b.onclick=function(){document.getElementById("privacy-modal").className="modal-bg show";};})();
+(function(){loadConsent();})();
 (function(){var b=document.getElementById("btn-account-logout");if(b)b.onclick=function(){fbLogout();};})();
 (function(){var b=document.getElementById("btn-account-login");if(b)b.onclick=function(){
   try{localStorage.removeItem("forge_skip_login");}catch(e){}
@@ -4003,6 +4065,49 @@ var FB_CONFIG = {
 };
 var fbAuth = null, fbDb = null, fbUser = null, fbReady = false, fbSyncTimer = null;
 
+var consentAccepted = false;
+var CONSENT_VERSION = "1.0";
+function loadConsent(){
+  try{ consentAccepted = localStorage.getItem("forge_consent")===CONSENT_VERSION; }catch(e){ consentAccepted=false; }
+  updConsentUI();
+}
+function toggleConsent(){
+  consentAccepted = !consentAccepted;
+  updConsentUI();
+}
+function updConsentUI(){
+  var chk = document.getElementById("consent-check");
+  var tick = document.getElementById("consent-tick");
+  if(chk && tick){
+    if(consentAccepted){
+      chk.style.background = "var(--accent)";
+      chk.style.borderColor = "var(--accent)";
+      tick.style.display = "block";
+    } else {
+      chk.style.background = "transparent";
+      chk.style.borderColor = "rgba(255,255,255,0.25)";
+      tick.style.display = "none";
+    }
+  }
+}
+function recordConsent(){
+  // Called after successful login or skip - persists acceptance with version+date
+  try{
+    localStorage.setItem("forge_consent", CONSENT_VERSION);
+    localStorage.setItem("forge_consent_date", new Date().toISOString());
+  }catch(e){}
+  consentAccepted = true;
+}
+function requireConsent(){
+  if(!consentAccepted){
+    showLoginError("Para continuar, marque que voce leu e aceita os Termos de Uso e a Politica de Privacidade.");
+    var box = document.getElementById("consent-box");
+    if(box){ box.style.borderColor = "#FB5C73"; setTimeout(function(){ if(box) box.style.borderColor="rgba(255,255,255,0.1)"; }, 2500); }
+    return false;
+  }
+  return true;
+}
+
 var fbInitTries = 0;
 function fbInit(){
   // Wait for the SDK scripts (may load slowly); retry up to ~8s
@@ -4086,6 +4191,8 @@ function fbErrorMsg(err){
 
 function fbLoginGoogle(){
   if(!fbReady){showLoginError("Firebase nao carregou. Verifique a conexao e recarregue.");return;}
+  if(!requireConsent())return;
+  recordConsent();
   showLoginLoading();
   var provider = new firebase.auth.GoogleAuthProvider();
   fbAuth.signInWithPopup(provider).catch(function(err){
@@ -4100,6 +4207,8 @@ function fbLoginGoogle(){
 
 function fbLoginEmail(){
   if(!fbReady){showLoginError("Firebase nao carregou. Verifique a conexao e recarregue.");return;}
+  if(!requireConsent())return;
+  recordConsent();
   var em = document.getElementById("login-email");
   var pw = document.getElementById("login-pass");
   var email = em?em.value.trim():"";
@@ -4111,6 +4220,8 @@ function fbLoginEmail(){
 
 function fbSignupEmail(){
   if(!fbReady){showLoginError("Firebase nao carregou. Verifique a conexao e recarregue.");return;}
+  if(!requireConsent())return;
+  recordConsent();
   var em = document.getElementById("login-email");
   var pw = document.getElementById("login-pass");
   var email = em?em.value.trim():"";
@@ -4128,7 +4239,7 @@ function fbLogout(){
 // ---- FIRESTORE SYNC ----
 function fsCollectData(){
   return {
-    treino: {cats:cats,lib:lib,logs:logs,cardio:clogs,schedule:schedule,theme:curTheme,programs:programs},
+    treino: {cats:cats,lib:lib,logs:logs,cardio:clogs,schedule:schedule,theme:curTheme,programs:programs,consentVersion:CONSENT_VERSION,consentDate:(function(){try{return localStorage.getItem("forge_consent_date")||null;}catch(e){return null;}})()},
     proto: {protoItems:protoItems,protoCycles:protoCycles,protoDoses:protoDoses,protoConcluded:protoConcluded},
     nutri: {meals:meals,mealChecks:mealChecks,waterLog:waterLog,waterGoal:waterGoal,waterHistory:waterHistory,antroLog:antroLog,weightLog:weightLog,bodyProfile:bodyProfile}
   };
