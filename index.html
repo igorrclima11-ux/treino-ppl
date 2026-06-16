@@ -26,19 +26,64 @@ body.theme-midnight{--bg:#000;--bg2:#0C0C0C;--bg3:#070707;--card-border:rgba(255
 /* Neon - verde acido vibrante (o diferentao) */
 body.theme-neon{--bg:#070A07;--bg2:#0E140E;--bg3:#0A0F0A;--card-border:rgba(163,255,0,0.14);--accent:#A3FF00;--accent2:#65D700;--radial:rgba(163,255,0,0.06)}
 /* Light - tema claro de verdade */
-body.theme-light{--bg:#F4F5F7;--bg2:#FFFFFF;--bg3:#FAFBFC;--card-border:rgba(0,0,0,0.1);--accent:#0E7490;--accent2:#0891B2;--radial:rgba(14,116,144,0.04)}
-/* Light theme readability overrides - remap hardcoded dark-mode text colors */
-body.theme-light{color:#1A1A2E}
-body.theme-light .nav-bar{background:rgba(255,255,255,0.95);border-top-color:rgba(0,0,0,0.08)}
-body.theme-light [style*="color:#E8E8F0"]{color:#1A1A2E !important}
-body.theme-light [style*="color:#DDD"]{color:#2A2A3A !important}
-body.theme-light [style*="color:#CCC"]{color:#333 !important}
-body.theme-light [style*="color:#AAA"]{color:#555 !important}
-body.theme-light [style*="color:#888"]{color:#666 !important}
-body.theme-light [style*="color:#666"]{color:#777 !important}
-body.theme-light [style*="color:#555"]{color:#888 !important}
-body.theme-light input,body.theme-light select,body.theme-light textarea{color:#1A1A2E !important}
-body.theme-light .set-inp{color:#1A1A2E !important}
+body.theme-light{--bg:#EEF1F5;--bg2:#FFFFFF;--bg3:#F7F9FB;--card-border:rgba(0,0,0,0.09);--accent:#0E7490;--accent2:#0891B2;--radial:rgba(14,116,144,0.04)}
+/* ============ LIGHT THEME - comprehensive readable overrides ============ */
+body.theme-light{color:#15171C}
+body.theme-light .nav-bar{background:rgba(255,255,255,0.97);border-top-color:rgba(0,0,0,0.08)}
+/* --- TEXT: light/white text -> dark (invisible-on-white fix) --- */
+body.theme-light [style*="color:#FFF"]{color:#15171C !important}
+body.theme-light [style*="color:#fff"]{color:#15171C !important}
+body.theme-light [style*="color:#FFFFFF"]{color:#15171C !important}
+body.theme-light [style*="color:#E8E8F0"]{color:#15171C !important}
+body.theme-light [style*="color:#DDD"]{color:#23262E !important}
+body.theme-light [style*="color:#CCC"]{color:#2A2D36 !important}
+body.theme-light [style*="color:#AAA"]{color:#3E424C !important}
+body.theme-light [style*="color:#999"]{color:#454953 !important}
+body.theme-light [style*="color:#888"]{color:#52565F !important}
+body.theme-light [style*="color:#777"]{color:#565A64 !important}
+body.theme-light [style*="color:#666"]{color:#5E626C !important}
+body.theme-light [style*="color:#555"]{color:#646872 !important}
+body.theme-light [style*="color:#444"]{color:#7A7E88 !important}
+body.theme-light [style*="color:#333"]{color:#8E929C !important}
+/* --- ACCENT/CATEGORY colors: darken for contrast on white --- */
+body.theme-light [style*="color:#22D3EE"]{color:#0E7490 !important}
+body.theme-light [style*="color:#00E5FF"]{color:#0E7490 !important}
+body.theme-light [style*="color:#FCD34D"]{color:#B45309 !important}
+body.theme-light [style*="color:#FF9F0A"]{color:#C2660A !important}
+body.theme-light [style*="color:#FB923C"]{color:#C2510A !important}
+body.theme-light [style*="color:#10D9A0"]{color:#067A5A !important}
+body.theme-light [style*="color:#00D68F"]{color:#067A5A !important}
+body.theme-light [style*="color:#A3FF00"]{color:#4A7A00 !important}
+body.theme-light [style*="color:#A855F7"]{color:#7C3AED !important}
+body.theme-light [style*="color:#B575F9"]{color:#7C3AED !important}
+body.theme-light [style*="color:#3B82F6"]{color:#2563EB !important}
+body.theme-light [style*="color:#4285F4"]{color:#2563EB !important}
+body.theme-light [style*="color:#60A5FA"]{color:#2563EB !important}
+/* keep reds/pinks readable but visible */
+body.theme-light [style*="color:#FF3D71"]{color:#D81B5E !important}
+body.theme-light [style*="color:#FB5C73"]{color:#D81B5E !important}
+body.theme-light [style*="color:#F472B6"]{color:#BE237A !important}
+/* --- BACKGROUNDS: dark surfaces -> light --- */
+body.theme-light [style*="background:rgba(0,0,0,0.3)"]{background:rgba(0,0,0,0.04) !important}
+body.theme-light [style*="background:rgba(0,0,0,0.2)"]{background:rgba(0,0,0,0.03) !important}
+body.theme-light [style*="background:#0D0D15"]{background:#E8EBF0 !important}
+body.theme-light [style*="background:#1A1A28"]{background:#E2E6EC !important}
+body.theme-light [style*="background:#1A1A2E"]{background:#E2E6EC !important}
+body.theme-light [style*="background:#0A0A0F"]{background:#EEF1F5 !important}
+body.theme-light [style*="background:#111"]{background:#E8EBF0 !important}
+/* --- BORDERS: dark borders -> subtle dark on light --- */
+body.theme-light [style*="border-bottom:1px solid #0D0D15"]{border-bottom-color:rgba(0,0,0,0.08) !important}
+body.theme-light [style*="border-bottom:1px solid #0F0F1A"]{border-bottom-color:rgba(0,0,0,0.08) !important}
+body.theme-light [style*="border-bottom:1px solid #1A1A28"]{border-bottom-color:rgba(0,0,0,0.08) !important}
+/* --- INPUTS --- */
+body.theme-light input,body.theme-light select,body.theme-light textarea{color:#15171C !important;background:rgba(0,0,0,0.035) !important}
+body.theme-light input::placeholder,body.theme-light textarea::placeholder{color:#9BA0AA !important}
+body.theme-light .set-inp{color:#15171C !important;background:rgba(0,0,0,0.05) !important}
+/* --- EMPTY STATE / misc --- */
+body.theme-light .es-sub,body.theme-light .es-title{color:#5E626C !important}
+body.theme-light .es-icon{opacity:0.4}
+/* --- CARDS get soft shadow for depth on light bg --- */
+body.theme-light .log-card,body.theme-light .cfg-sec{box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
@@ -397,6 +442,63 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
     </div>
   </div>
 
+  <!-- PT SECTION (visible only for PT role) -->
+  <div class="cfg-sec" id="pt-section" style="display:none">
+    <div class="cfg-hdr">
+      <div><div style="font-size:13px;font-weight:700;color:#E8E8F0">Meus Alunos</div><div style="font-size:9px;color:#555;margin-top:1px">Acompanhe seus alunos vinculados</div></div>
+    </div>
+    <div style="padding:14px 18px">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--accent)33;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+        <div style="font-size:9px;color:#555;letter-spacing:1px;margin-bottom:5px">SEU CODIGO DE PERSONAL</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <span id="pt-my-code" style="font-size:18px;font-weight:800;color:var(--accent);letter-spacing:2px;font-family:monospace">FORGE-XXXX</span>
+          <button id="btn-copy-pt-code" class="xbtn" style="flex-shrink:0">Copiar</button>
+        </div>
+        <div style="font-size:9px;color:#666;margin-top:8px;line-height:1.5">Compartilhe esse codigo com seus alunos. Eles digitam em "Tenho um personal" para se vincular a voce.</div>
+      </div>
+      <div id="students-list"></div>
+    </div>
+  </div>
+
+  <!-- STUDENT SECTION (link to a PT) -->
+  <div class="cfg-sec" id="student-section" style="display:none">
+    <div class="cfg-hdr">
+      <div><div style="font-size:13px;font-weight:700;color:#E8E8F0">Meu Personal</div><div style="font-size:9px;color:#555;margin-top:1px">Vincule-se ao seu personal trainer</div></div>
+    </div>
+    <div style="padding:14px 18px">
+      <!-- Form to link (shown when not linked) -->
+      <div id="student-link-form">
+        <div style="display:flex;gap:7px">
+          <input type="text" id="pt-code-input" placeholder="Codigo do personal (ex: FORGE-7K2M)" style="flex:1;min-width:0;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#DDD;font-size:12px;padding:11px 13px;outline:none;font-family:inherit;text-transform:uppercase"/>
+          <button id="btn-link-pt" class="xbtn" style="flex-shrink:0;border-color:var(--accent)44;color:var(--accent)">Vincular</button>
+        </div>
+        <div id="pt-link-msg" style="display:none;font-size:10px;margin-top:8px"></div>
+      </div>
+      <!-- Linked box (shown when linked) -->
+      <div id="student-linked-box" style="display:none">
+        <div style="background:rgba(16,217,160,0.08);border:1px solid rgba(16,217,160,0.3);border-radius:10px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:9px;color:#10D9A0;letter-spacing:1px;margin-bottom:3px">VINCULADO A</div>
+            <div id="linked-pt-name" style="font-size:14px;font-weight:700;color:#E8E8F0">Personal</div>
+          </div>
+          <button id="btn-unlink-pt" class="xbtn" style="flex-shrink:0;border-color:rgba(255,61,113,0.3);color:#FF3D71">Desvincular</button>
+        </div>
+        <div style="font-size:9px;color:#666;margin-top:10px;line-height:1.5">Seu personal pode ver seus treinos e historico. Voce pode desvincular a qualquer momento.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BECOME PT (small link, visible when logged in & not PT) -->
+  <div class="cfg-sec" id="become-pt-section" style="display:none">
+    <div style="padding:14px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:10px;color:#666">E personal trainer?</div>
+        <button id="btn-become-pt" class="xbtn">Ativar modo PT</button>
+      </div>
+    </div>
+  </div>
+  <div id="pt-login-note" style="display:none"></div>
+
   <div class="cfg-sec">
     <div class="cfg-hdr">
       <div><div style="font-size:13px;font-weight:700;color:#E8E8F0">Google Drive</div><div style="font-size:9px;color:#555;margin-top:1px">Backup automatico na nuvem</div></div>
@@ -652,6 +754,88 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
       <button id="btn-share-evolution" style="flex:1;padding:12px;border-radius:10px;background:var(--accent)22;border:1px solid var(--accent)44;color:var(--accent);font-weight:700;font-size:10px;cursor:pointer;font-family:inherit;letter-spacing:1px">PRINT / SHARE</button>
     </div>
     <div style="font-size:8px;color:#333;text-align:center;margin-top:8px">Segure o botao PRINT para tirar print e compartilhar com seu personal</div>
+  </div>
+</div>
+
+<!-- MODAL: TECHNIQUE SELECTOR -->
+<div class="modal-bg" id="tech-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-weight:800;font-size:16px">Tecnica do exercicio</div>
+      <button class="xbtn" id="btn-close-tech">X</button>
+    </div>
+    <div style="font-size:10px;color:#666;margin-bottom:14px">Marque a tecnica que voce vai aplicar neste exercicio.</div>
+    <div id="tech-list" style="margin-bottom:14px"></div>
+    <div id="tech-val-wrap" style="display:none;margin-bottom:16px">
+      <div class="slabel">VALOR (<span id="tech-val-label">valor</span>)</div>
+      <input id="tech-val-inp" class="tinp" type="number" placeholder="Digite o valor" style="width:100%"/>
+    </div>
+    <button id="btn-save-tech" style="width:100%;padding:13px;border-radius:11px;background:var(--accent);color:#000;border:none;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;font-family:inherit">SALVAR TECNICA</button>
+  </div>
+</div>
+
+<!-- MODAL: BECOME PT -->
+<div class="modal-bg" id="pt-upgrade-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px">Ativar modo Personal</div>
+      <button class="xbtn" id="btn-close-pt-upgrade">X</button>
+    </div>
+    <div style="font-size:11px;color:#999;line-height:1.6;margin-bottom:14px">Digite o codigo de ativacao de personal trainer. Se voce nao tem um codigo, entre em contato pelo e-mail do app.</div>
+    <input type="text" id="pt-secret-input" placeholder="Codigo de ativacao" style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#DDD;font-size:13px;padding:12px 14px;outline:none;font-family:inherit;margin-bottom:10px"/>
+    <div id="pt-upgrade-msg" style="display:none;font-size:10px;margin-bottom:10px"></div>
+    <button id="btn-confirm-pt-upgrade" style="width:100%;padding:13px;border-radius:11px;background:var(--accent);color:#000;border:none;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;font-family:inherit">ATIVAR</button>
+  </div>
+</div>
+
+<!-- MODAL: LINK TO PT -->
+<div class="modal-bg" id="pt-link-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:800;font-size:16px">Vincular ao Personal</div>
+      <button class="xbtn" id="btn-close-pt-link">X</button>
+    </div>
+    <div style="font-size:11px;color:#999;line-height:1.6;margin-bottom:12px">Digite o codigo que seu personal trainer compartilhou com voce.</div>
+    <input type="text" id="pt-code-input-modal" placeholder="FORGE-XXXX" style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#DDD;font-size:14px;padding:12px 14px;outline:none;font-family:monospace;text-transform:uppercase;margin-bottom:10px"/>
+    <div id="pt-link-msg-modal" style="display:none;font-size:10px;margin-bottom:10px"></div>
+    <button id="btn-confirm-pt-link" style="width:100%;padding:13px;border-radius:11px;background:var(--accent);color:#000;border:none;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;font-family:inherit">BUSCAR PERSONAL</button>
+  </div>
+</div>
+
+<!-- CONFIRM: LINK TO PT (shows PT name) -->
+<div class="conf-bg" id="pt-confirm-modal">
+  <div style="background:#0D0D15;border:1px solid var(--accent);border-radius:16px;padding:24px 20px;width:100%;max-width:320px">
+    <div style="font-weight:800;font-size:16px;margin-bottom:10px">Confirmar vinculo</div>
+    <div style="font-size:11px;color:#999;line-height:1.6;margin-bottom:8px">Voce esta se vinculando ao personal:</div>
+    <div id="pt-confirm-name" style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:14px">Personal</div>
+    <div style="font-size:10px;color:#777;line-height:1.6;margin-bottom:18px">Ao confirmar, voce autoriza esse personal a visualizar seus treinos, historico e progresso. Voce pode desvincular quando quiser.</div>
+    <div style="display:flex;gap:8px">
+      <button id="btn-cancel-pt-confirm" style="flex:1;padding:11px;border-radius:9px;background:#1A1A28;border:1px solid #2A2A3A;color:#888;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">CANCELAR</button>
+      <button id="btn-do-pt-confirm" style="flex:1;padding:11px;border-radius:9px;background:var(--accent)22;border:1px solid var(--accent);color:var(--accent);font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">AUTORIZAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM: UNLINK PT -->
+<div class="conf-bg" id="pt-unlink-modal">
+  <div style="background:#0D0D15;border:1px solid #FF3D71;border-radius:16px;padding:24px 20px;width:100%;max-width:300px">
+    <div style="font-weight:800;font-size:16px;margin-bottom:8px">Desvincular personal?</div>
+    <div style="font-size:10px;color:#888;margin-bottom:18px;line-height:1.6">Seu personal deixara de ver seus dados. Voce pode se vincular novamente depois com o codigo.</div>
+    <div style="display:flex;gap:8px">
+      <button id="btn-cancel-unlink" style="flex:1;padding:11px;border-radius:9px;background:#1A1A28;border:1px solid #2A2A3A;color:#888;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">CANCELAR</button>
+      <button id="btn-do-unlink" style="flex:1;padding:11px;border-radius:9px;background:rgba(255,61,113,0.15);border:1px solid #FF3D71;color:#FF3D71;font-weight:700;font-size:10px;cursor:pointer;font-family:inherit">DESVINCULAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: STUDENT VIEW (PT reads student data) -->
+<div class="modal-bg" id="student-view-modal">
+  <div class="modal-sh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div><div style="font-size:9px;color:#555;letter-spacing:1px">ALUNO</div><div id="student-view-name" style="font-weight:800;font-size:16px;color:#E8E8F0">Aluno</div></div>
+      <button class="xbtn" id="btn-close-student-view">X</button>
+    </div>
+    <div id="student-view-body"></div>
   </div>
 </div>
 
@@ -1209,6 +1393,53 @@ function esc(s){
   if(s===null||s===undefined) return "";
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
+
+// TECNICAS DE TREINO - agrupadas por categoria
+var TECNICAS = [
+  {grupo:"Intensificacao", items:[
+    {id:"drop",nome:"Drop Set",campo:"num",hint:"reducoes"},
+    {id:"restpause",nome:"Rest-Pause",campo:"num",hint:"pausas"},
+    {id:"myoreps",nome:"Myo-Reps",campo:null},
+    {id:"cluster",nome:"Cluster Set",campo:"num",hint:"clusters"},
+    {id:"parciais",nome:"Reps Parciais",campo:null},
+    {id:"forcadas",nome:"Reps Forcadas",campo:null},
+    {id:"preexa",nome:"Pre-Exaustao",campo:null},
+    {id:"posexa",nome:"Pos-Exaustao",campo:null}
+  ]},
+  {grupo:"Series combinadas", items:[
+    {id:"biset",nome:"Bi-Set",campo:null},
+    {id:"triset",nome:"Tri-Set / Giant",campo:null},
+    {id:"superset",nome:"Superset",campo:null},
+    {id:"backoff",nome:"Back-Off Set",campo:null},
+    {id:"topback",nome:"Top + Back-Off",campo:null}
+  ]},
+  {grupo:"Execucao / cadencia", items:[
+    {id:"isometria",nome:"Isometria",campo:"num",hint:"segundos"},
+    {id:"cadencia",nome:"Cadencia",campo:"txt",hint:"ex: 3-1-2"},
+    {id:"tensao",nome:"Tensao Continua",campo:null},
+    {id:"stretch",nome:"Alongada (Stretch)",campo:null}
+  ]},
+  {grupo:"Esforco / intensidade", items:[
+    {id:"rpe",nome:"RPE",campo:"num",hint:"1-10"},
+    {id:"rir",nome:"RIR",campo:"num",hint:"reps reserva"},
+    {id:"amrap",nome:"AMRAP",campo:null},
+    {id:"falha",nome:"Ate a Falha",campo:null}
+  ]}
+];
+function getTecnica(id){
+  if(!id)return null;
+  for(var g=0;g<TECNICAS.length;g++){
+    for(var i=0;i<TECNICAS[g].items.length;i++){
+      if(TECNICAS[g].items[i].id===id)return TECNICAS[g].items[i];
+    }
+  }
+  return null;
+}
+function tecnicaLabel(id,val){
+  var t=getTecnica(id);
+  if(!t)return "";
+  return t.nome+(val?" ("+val+")":"");
+}
 function fmtD(s){if(!s)return"";var p=s.split("-");return pad(+p[2])+"/"+pad(+p[1])+"/"+p[0];}
 function pLD(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
 function wkS(s){var d=pLD(s);d.setDate(d.getDate()-d.getDay());return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
@@ -1241,7 +1472,7 @@ function setPage(p){
   if(p==="home") renderDashboard();
   if(p==="proto") renderProto();
   if(p==="nutri") renderNutri();
-  if(p==="config"){renderThemePicker();renderPrograms();renderCatCfg();renderLibCfg();notifUpdateUI();}
+  if(p==="config"){renderThemePicker();renderPrograms();renderCatCfg();renderLibCfg();notifUpdateUI();updPtUI();}
 }
 
 function showSuggestionBanner(){
@@ -1592,6 +1823,102 @@ function showWorkout(){
   ws.appendChild(addBtn);
 }
 
+function renderTechBadge(wrap,ex,ac){
+  wrap.innerHTML="";
+  if(ex.tecnica){
+    var t=getTecnica(ex.tecnica);
+    var badge=document.createElement("button");
+    badge.style.cssText="display:inline-flex;align-items:center;gap:5px;background:"+ac+"1A;border:1px solid "+ac+"44;border-radius:6px;padding:3px 8px;cursor:pointer;font-family:inherit";
+    badge.innerHTML="<span style='font-size:9px;color:"+ac+";font-weight:700'>"+esc(tecnicaLabel(ex.tecnica,ex.tecnicaVal))+"</span><span style='font-size:9px;color:"+ac+"99'>&#9998;</span>";
+    badge.onclick=function(){openTechModal(ex.id);};
+    wrap.appendChild(badge);
+  } else {
+    var addBtn=document.createElement("button");
+    addBtn.style.cssText="display:inline-flex;align-items:center;gap:4px;background:transparent;border:1px dashed rgba(255,255,255,0.15);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:inherit";
+    addBtn.innerHTML="<span style='font-size:9px;color:#666'>+ Tecnica</span>";
+    addBtn.onclick=function(){openTechModal(ex.id);};
+    wrap.appendChild(addBtn);
+  }
+}
+
+var techModalExId=null;
+function openTechModal(exId){
+  techModalExId=exId;
+  var ex=null;
+  for(var i=0;i<sessExercises.length;i++){if(sessExercises[i].id===exId){ex=sessExercises[i];break;}}
+  if(!ex)return;
+  techSelTemp=ex.tecnica||null;
+  techValTemp=ex.tecnicaVal||"";
+  renderTechList();
+  document.getElementById("tech-modal").className="modal-bg show";
+}
+var techSelTemp=null, techValTemp="";
+function renderTechList(){
+  var el=document.getElementById("tech-list");
+  if(!el)return;
+  el.innerHTML="";
+  // "None" option
+  var noneBtn=document.createElement("button");
+  noneBtn.style.cssText="width:100%;text-align:left;padding:10px 12px;border-radius:9px;margin-bottom:10px;background:"+(techSelTemp===null?"var(--accent)22":"rgba(255,255,255,0.03)")+";border:1px solid "+(techSelTemp===null?"var(--accent)":"rgba(255,255,255,0.08)")+";color:"+(techSelTemp===null?"var(--accent)":"#888")+";font-weight:700;font-size:11px;cursor:pointer;font-family:inherit";
+  noneBtn.textContent="Sem tecnica";
+  noneBtn.onclick=function(){techSelTemp=null;techValTemp="";renderTechList();};
+  el.appendChild(noneBtn);
+  for(var g=0;g<TECNICAS.length;g++){
+    var grp=TECNICAS[g];
+    var gh=document.createElement("div");
+    gh.style.cssText="font-size:8px;color:var(--accent);letter-spacing:1.5px;font-weight:700;margin:12px 0 7px;text-transform:uppercase";
+    gh.textContent=grp.grupo;
+    el.appendChild(gh);
+    var grid=document.createElement("div");
+    grid.style.cssText="display:flex;flex-wrap:wrap;gap:6px";
+    for(var i=0;i<grp.items.length;i++){
+      (function(item){
+        var sel=techSelTemp===item.id;
+        var b=document.createElement("button");
+        b.style.cssText="padding:7px 11px;border-radius:8px;background:"+(sel?"var(--accent)22":"rgba(255,255,255,0.04)")+";border:1px solid "+(sel?"var(--accent)":"rgba(255,255,255,0.08)")+";color:"+(sel?"var(--accent)":"#AAA")+";font-weight:600;font-size:10px;cursor:pointer;font-family:inherit";
+        b.textContent=item.nome;
+        b.onclick=function(){techSelTemp=item.id;if(!item.campo)techValTemp="";renderTechList();};
+        grid.appendChild(b);
+      })(grp.items[i]);
+    }
+    el.appendChild(grid);
+  }
+  // Value field if selected technique needs one
+  var valWrap=document.getElementById("tech-val-wrap");
+  var t=getTecnica(techSelTemp);
+  if(t&&t.campo){
+    valWrap.style.display="block";
+    var inp=document.getElementById("tech-val-inp");
+    var lbl=document.getElementById("tech-val-label");
+    if(lbl)lbl.textContent=t.hint||"valor";
+    if(inp){inp.value=techValTemp;inp.setAttribute("type",t.campo==="num"?"number":"text");}
+  } else {
+    valWrap.style.display="none";
+  }
+}
+function saveTech(){
+  if(!techModalExId)return;
+  var valInp=document.getElementById("tech-val-inp");
+  var t=getTecnica(techSelTemp);
+  var val=(t&&t.campo&&valInp)?valInp.value.trim():"";
+  for(var i=0;i<sessExercises.length;i++){
+    if(sessExercises[i].id===techModalExId){
+      sessExercises[i].tecnica=techSelTemp;
+      sessExercises[i].tecnicaVal=val;
+      break;
+    }
+  }
+  // Re-render just this exercise's badge
+  var wrap=document.getElementById("tech_"+techModalExId);
+  if(wrap){
+    var cat=gC(curCatId);
+    var exObj=null;
+    for(var j=0;j<sessExercises.length;j++){if(sessExercises[j].id===techModalExId){exObj=sessExercises[j];break;}}
+    if(exObj)renderTechBadge(wrap,exObj,cat?cat.color:"#22D3EE");
+  }
+  document.getElementById("tech-modal").className="modal-bg";
+}
+
 function mkExCard(ex,ac,exIdx){
   var ns=sessData[ex.id]?sessData[ex.id].length:(ex.sets||3);
   var card=document.createElement("div");card.className="ex-card";card.id="exc_"+ex.id;
@@ -1635,6 +1962,10 @@ function mkExCard(ex,ac,exIdx){
   var dotsWrap=document.createElement("div");dotsWrap.className="dots-row";dotsWrap.id="dots_"+ex.id;
   for(var di=0;di<ns;di++){var dot=document.createElement("div");dot.className="dot"+(di===0?" dot-cur":"");dotsWrap.appendChild(dot);}
   nd.appendChild(dotsWrap);
+  // Technique badge/selector
+  var techWrap=document.createElement("div");techWrap.id="tech_"+ex.id;techWrap.style.cssText="margin-top:5px";
+  renderTechBadge(techWrap,ex,ac);
+  nd.appendChild(techWrap);
   var cd=document.createElement("div");cd.style.cssText="display:flex;align-items:center;gap:5px";
   var bm=document.createElement("button");bm.className="sbtn";bm.textContent="-";
   var bl=document.createElement("span");bl.style.cssText="font-size:9px;color:#555;white-space:nowrap";bl.textContent="SERIES";
@@ -1860,7 +2191,7 @@ function saveTreino(){
       }
       sd[ex.id]=arr;
       // Store name + temp flag for exercises (needed for temp exercises in reports)
-      exMeta[ex.id]={name:ex.name,temp:ex.temp||false,reps:ex.reps,sets:ex.sets,type:ex.type||"carga"};
+      exMeta[ex.id]={name:ex.name,temp:ex.temp||false,reps:ex.reps,sets:ex.sets,type:ex.type||"carga",tecnica:ex.tecnica||null,tecnicaVal:ex.tecnicaVal||""};
     }
     logs.push({id:Date.now(),date:dt,catId:cat.id,catName:cat.name,catColor:cat.color,sets:sd,exMeta:exMeta,notes:document.getElementById("notes").value,duration:sessTimerSec});
     sls("t5_logs",logs);
@@ -2074,7 +2405,19 @@ function renderLog(){
       for(var k=0;k<cat.exercises.length;k++){
         var ex=cat.exercises[k];var es=log.sets[ex.id]||[];
         var xd=document.createElement("div");xd.style.cssText="padding:5px 0;border-bottom:1px solid #0D0D15";
-        var xn=document.createElement("div");xn.style.cssText="font-size:10px;color:#888;margin-bottom:3px";xn.textContent=ex.name;
+        var xn=document.createElement("div");xn.style.cssText="font-size:10px;color:#888;margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap";
+        var xnName=document.createElement("span");xnName.textContent=ex.name;xn.appendChild(xnName);
+        // Technique badge (if recorded)
+        var exM=log.exMeta&&log.exMeta[ex.id]?log.exMeta[ex.id]:null;
+        if(exM&&exM.tecnica){
+          var tec=getTecnica(exM.tecnica);
+          if(tec){
+            var tb=document.createElement("span");
+            tb.style.cssText="font-size:8px;font-weight:700;background:"+col+"22;color:"+col+";border:1px solid "+col+"44;border-radius:4px;padding:1px 6px;letter-spacing:0.3px";
+            tb.textContent=esc(tec.nome)+(exM.tecnicaVal?" "+esc(String(exM.tecnicaVal)):"");
+            xn.appendChild(tb);
+          }
+        }
         xd.appendChild(xn);
         var sr3=document.createElement("div");sr3.style.cssText="display:flex;flex-wrap:wrap;gap:3px";
         for(var s=0;s<es.length;s++){
@@ -3591,7 +3934,24 @@ setTimeout(fbInit, 0);
 (function(){var b=document.getElementById("btn-close-privacy");if(b)b.onclick=function(){document.getElementById("privacy-modal").className="modal-bg";};})();
 (function(){var b=document.getElementById("cfg-link-terms");if(b)b.onclick=function(){document.getElementById("terms-modal").className="modal-bg show";};})();
 (function(){var b=document.getElementById("cfg-link-privacy");if(b)b.onclick=function(){document.getElementById("privacy-modal").className="modal-bg show";};})();
+(function(){var b=document.getElementById("btn-close-tech");if(b)b.onclick=function(){document.getElementById("tech-modal").className="modal-bg";};})();
+(function(){var b=document.getElementById("btn-save-tech");if(b)b.onclick=saveTech;})();
+(function(){var b=document.getElementById("tech-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
 (function(){loadConsent();})();
+// === PT PANEL WIRING ===
+(function(){var b=document.getElementById("btn-become-pt");if(b)b.onclick=function(){var m=document.getElementById("pt-upgrade-msg");if(m)m.style.display="none";document.getElementById("pt-upgrade-modal").className="modal-bg show";};})();
+(function(){var b=document.getElementById("btn-close-pt-upgrade");if(b)b.onclick=function(){closeModal("pt-upgrade-modal");};})();
+(function(){var b=document.getElementById("btn-confirm-pt-upgrade");if(b)b.onclick=function(){var inp=document.getElementById("pt-secret-input");fsBecomePT(inp?inp.value:"");};})();
+(function(){var b=document.getElementById("btn-link-pt");if(b)b.onclick=function(){var inp=document.getElementById("pt-code-input");fsLinkToPT(inp?inp.value:"");};})();
+(function(){var b=document.getElementById("btn-cancel-pt-confirm");if(b)b.onclick=function(){pendingPtLink=null;closeModal("pt-confirm-modal");};})();
+(function(){var b=document.getElementById("btn-do-pt-confirm");if(b)b.onclick=fsConfirmLink;})();
+(function(){var b=document.getElementById("btn-unlink-pt");if(b)b.onclick=function(){document.getElementById("pt-unlink-modal").className="conf-bg show";};})();
+(function(){var b=document.getElementById("btn-cancel-unlink");if(b)b.onclick=function(){closeModal("pt-unlink-modal");};})();
+(function(){var b=document.getElementById("btn-do-unlink");if(b)b.onclick=fsUnlinkPT;})();
+(function(){var b=document.getElementById("btn-close-student-view");if(b)b.onclick=function(){closeModal("student-view-modal");viewingStudent=null;};})();
+(function(){var b=document.getElementById("btn-copy-pt-code");if(b)b.onclick=function(){if(myPtCode&&navigator.clipboard){navigator.clipboard.writeText(myPtCode);b.textContent="Copiado!";setTimeout(function(){b.textContent="Copiar";},1500);}};})();
+(function(){var b=document.getElementById("student-view-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
+(function(){var b=document.getElementById("pt-upgrade-modal");if(b)b.onclick=function(e){if(e.target===this)this.className="modal-bg";};})();
 (function(){var b=document.getElementById("btn-account-logout");if(b)b.onclick=function(){fbLogout();};})();
 (function(){var b=document.getElementById("btn-account-login");if(b)b.onclick=function(){
   try{localStorage.removeItem("forge_skip_login");}catch(e){}
@@ -4134,6 +4494,7 @@ function fbInit(){
         hideLoginScreen();
         updAccountUI();
         fsOnLogin();
+        fsLoadRole();
       } else {
         updAccountUI();
         var skipped = false;
@@ -4260,6 +4621,297 @@ function fsSaveAll(){
   }catch(e){}
 }
 
+
+// ============================================================================
+// PAINEL DO PT - papeis, vinculo, leitura de alunos
+// ============================================================================
+var PT_UPGRADE_SECRET = "FORGE-PT-2026"; // senha para virar PT (passe so a PTs aprovados)
+var userRole = "aluno";       // "aluno" | "pt"
+var myPtCode = null;          // codigo do PT (se for PT)
+var linkedPT = null;          // {uid, nome} se o aluno tem PT
+var ptStudents = [];          // lista de alunos (se for PT)
+var viewingStudent = null;    // aluno aberto no momento (leitura)
+
+function genPtCode(){
+  // Gera codigo curto legivel: FORGE-XXXX
+  var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  var s = "";
+  for(var i=0;i<4;i++){ s += chars.charAt(Math.floor(Math.random()*chars.length)); }
+  return "FORGE-" + s;
+}
+
+function fsLoadRole(){
+  // Read role + link info from user doc
+  if(!fbReady||!fbUser||!fbDb) return;
+  try{
+    var base = fbDb.collection("users").doc(fbUser.uid);
+    base.get().then(function(snap){
+      var d = snap.exists ? snap.data() : {};
+      userRole = d.role || "aluno";
+      myPtCode = d.ptCode || null;
+      linkedPT = d.linkedPT || null;
+      updAccountUI();
+      updPtUI();
+      if(userRole==="pt") fsLoadStudents();
+    }).catch(function(e){});
+  }catch(e){}
+}
+
+function fsBecomePT(secret){
+  if(secret !== PT_UPGRADE_SECRET){
+    showPtMsg("pt-upgrade-msg", "Codigo invalido.", true);
+    return;
+  }
+  if(!fbReady||!fbUser||!fbDb){
+    showPtMsg("pt-upgrade-msg", "Voce precisa estar logado para virar PT.", true);
+    return;
+  }
+  var code = myPtCode || genPtCode();
+  try{
+    var base = fbDb.collection("users").doc(fbUser.uid);
+    base.set({role:"pt", ptCode:code, ptNome:(fbUser.displayName||fbUser.email||"Personal")}, {merge:true});
+    // Index for code -> PT resolution
+    fbDb.collection("ptLinks").doc(code).set({
+      ptUid: fbUser.uid,
+      ptNome: (fbUser.displayName||fbUser.email||"Personal")
+    });
+    userRole = "pt";
+    myPtCode = code;
+    updPtUI();
+    updAccountUI();
+    fsLoadStudents();
+    closeModal("pt-upgrade-modal");
+  }catch(e){
+    showPtMsg("pt-upgrade-msg", "Erro ao ativar. Tente novamente.", true);
+  }
+}
+
+function fsLinkToPT(code){
+  code = (code||"").trim().toUpperCase();
+  if(!code){ showPtMsg("pt-link-msg", "Digite o codigo do seu personal.", true); return; }
+  if(!fbReady||!fbUser||!fbDb){ showPtMsg("pt-link-msg", "Voce precisa estar logado.", true); return; }
+  try{
+    fbDb.collection("ptLinks").doc(code).get().then(function(snap){
+      if(!snap.exists){ showPtMsg("pt-link-msg", "Codigo nao encontrado. Confira com seu personal.", true); return; }
+      var d = snap.data();
+      if(d.ptUid === fbUser.uid){ showPtMsg("pt-link-msg", "Esse codigo e seu. Use o codigo de outro personal.", true); return; }
+      // Show confirm with PT name
+      pendingPtLink = {code:code, ptUid:d.ptUid, ptNome:d.ptNome};
+      var nm = document.getElementById("pt-confirm-name");
+      if(nm) nm.textContent = d.ptNome || "Personal";
+      closeModal("pt-link-modal");
+      document.getElementById("pt-confirm-modal").className = "conf-bg show";
+    }).catch(function(e){ showPtMsg("pt-link-msg", "Erro ao buscar. Tente de novo.", true); });
+  }catch(e){}
+}
+
+function fsConfirmLink(){
+  if(!pendingPtLink || !fbReady || !fbUser || !fbDb) return;
+  try{
+    var base = fbDb.collection("users").doc(fbUser.uid);
+    base.set({linkedPT:{uid:pendingPtLink.ptUid, nome:pendingPtLink.ptNome}}, {merge:true});
+    // Register student under the PT
+    fbDb.collection("ptStudents").doc(pendingPtLink.ptUid)
+      .collection("students").doc(fbUser.uid).set({
+        nome: (fbUser.displayName||fbUser.email||"Aluno"),
+        email: (fbUser.email||""),
+        vinculadoEm: Date.now(),
+        consentido: true
+      });
+    linkedPT = {uid:pendingPtLink.ptUid, nome:pendingPtLink.ptNome};
+    pendingPtLink = null;
+    document.getElementById("pt-confirm-modal").className = "conf-bg";
+    updPtUI();
+  }catch(e){}
+}
+
+function fsUnlinkPT(){
+  if(!fbReady||!fbUser||!fbDb||!linkedPT) return;
+  try{
+    var base = fbDb.collection("users").doc(fbUser.uid);
+    base.set({linkedPT:null}, {merge:true});
+    // Remove from PT's student list
+    fbDb.collection("ptStudents").doc(linkedPT.uid)
+      .collection("students").doc(fbUser.uid).delete();
+    linkedPT = null;
+    document.getElementById("pt-unlink-modal").className = "conf-bg";
+    updPtUI();
+  }catch(e){}
+}
+
+function fsLoadStudents(){
+  if(!fbReady||!fbUser||!fbDb||userRole!=="pt") return;
+  try{
+    fbDb.collection("ptStudents").doc(fbUser.uid).collection("students").get().then(function(qs){
+      ptStudents = [];
+      qs.forEach(function(doc){
+        var d = doc.data();
+        ptStudents.push({uid:doc.id, nome:d.nome, email:d.email, vinculadoEm:d.vinculadoEm});
+      });
+      renderStudents();
+    }).catch(function(e){});
+  }catch(e){}
+}
+
+var pendingPtLink = null;
+var studentData = null; // loaded student's data (read-only)
+
+function fsOpenStudent(studentUid, studentNome){
+  if(!fbReady||!fbUser||!fbDb) return;
+  viewingStudent = {uid:studentUid, nome:studentNome};
+  // Load the student's treino data (read-only)
+  var msg = document.getElementById("student-view-body");
+  if(msg) msg.innerHTML = "<div style='text-align:center;padding:40px;color:#555;font-size:11px'>Carregando dados do aluno...</div>";
+  document.getElementById("student-view-modal").className = "modal-bg show";
+  var sh = document.getElementById("student-view-name");
+  if(sh) sh.textContent = studentNome;
+  try{
+    var base = fbDb.collection("users").doc(studentUid).collection("appdata");
+    base.doc("treino").get().then(function(snap){
+      if(snap.exists){
+        try{ studentData = JSON.parse(snap.data().json); }catch(e){ studentData = null; }
+      } else { studentData = null; }
+      renderStudentView();
+    }).catch(function(e){
+      if(msg) msg.innerHTML = "<div style='text-align:center;padding:40px;color:#FB5C73;font-size:11px'>Nao foi possivel carregar (verifique as permissoes).</div>";
+    });
+  }catch(e){}
+}
+
+function renderStudentView(){
+  var body = document.getElementById("student-view-body");
+  if(!body) return;
+  if(!studentData){
+    body.innerHTML = "<div style='text-align:center;padding:40px;color:#555;font-size:11px'>Este aluno ainda nao tem treinos registrados.</div>";
+    return;
+  }
+  body.innerHTML = "";
+  var sd = studentData;
+  // Active program
+  if(sd.programs && sd.programs.length){
+    var ap = null;
+    for(var i=0;i<sd.programs.length;i++){ if(sd.programs[i].ativo){ ap = sd.programs[i]; break; } }
+    if(ap){
+      var pSec = document.createElement("div");
+      pSec.style.cssText = "background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--accent)33;border-radius:12px;padding:13px 15px;margin-bottom:12px";
+      var pHtml = "<div style='font-size:9px;color:#555;letter-spacing:1px;margin-bottom:4px'>PROGRAMA ATIVO</div><div style='font-size:14px;font-weight:800;color:var(--accent)'>"+esc(ap.nome)+"</div>";
+      pSec.innerHTML = pHtml;
+      body.appendChild(pSec);
+    }
+  }
+  // Categories summary
+  if(sd.cats && sd.cats.length){
+    var cHdr = document.createElement("div");
+    cHdr.style.cssText = "font-size:9px;color:#555;letter-spacing:1px;margin:14px 0 8px";
+    cHdr.textContent = "TREINOS (" + sd.cats.length + ")";
+    body.appendChild(cHdr);
+    for(var c=0;c<sd.cats.length;c++){
+      (function(cat){
+        var cCard = document.createElement("div");
+        cCard.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid "+(cat.color||"#333")+"22;border-radius:10px;padding:11px 13px;margin-bottom:7px";
+        var exNames = "";
+        if(cat.exercises && cat.exercises.length){
+          var names = [];
+          for(var e=0;e<cat.exercises.length;e++){ names.push(esc(cat.exercises[e].name)); }
+          exNames = names.join(", ");
+        }
+        cCard.innerHTML = "<div style='font-size:12px;font-weight:700;color:"+(cat.color||"#888")+";margin-bottom:3px'>"+esc(cat.name)+"</div><div style='font-size:9px;color:#666;line-height:1.5'>"+(exNames||"Sem exercicios")+"</div>";
+        body.appendChild(cCard);
+      })(sd.cats[c]);
+    }
+  }
+  // Recent workout history
+  if(sd.logs && sd.logs.length){
+    var lHdr = document.createElement("div");
+    lHdr.style.cssText = "font-size:9px;color:#555;letter-spacing:1px;margin:16px 0 8px";
+    lHdr.textContent = "HISTORICO RECENTE";
+    body.appendChild(lHdr);
+    var recent = sd.logs.slice(-10).reverse();
+    for(var l=0;l<recent.length;l++){
+      (function(log){
+        var lCard = document.createElement("div");
+        lCard.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:9px;padding:9px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center";
+        var nSets = 0;
+        if(log.sets){ for(var k in log.sets){ if(log.sets.hasOwnProperty(k)) nSets += (log.sets[k]||[]).length; } }
+        lCard.innerHTML = "<div><div style='font-size:11px;font-weight:700;color:"+(log.catColor||"#888")+"'>"+esc(log.catName||"Treino")+"</div><div style='font-size:9px;color:#555;margin-top:1px'>"+(log.date||"")+"</div></div><div style='font-size:9px;color:#666'>"+nSets+" series</div>";
+        body.appendChild(lCard);
+      })(recent[l]);
+    }
+  }
+  if((!sd.cats||!sd.cats.length) && (!sd.logs||!sd.logs.length)){
+    body.innerHTML = "<div style='text-align:center;padding:40px;color:#555;font-size:11px'>Este aluno ainda nao tem treinos registrados.</div>";
+  }
+}
+
+function renderStudents(){
+  var el = document.getElementById("students-list");
+  if(!el) return;
+  el.innerHTML = "";
+  if(!ptStudents.length){
+    el.innerHTML = "<div style='font-size:10px;color:#555;padding:14px 0;text-align:center'>Nenhum aluno vinculado ainda. Compartilhe seu codigo com seus alunos.</div>";
+    return;
+  }
+  for(var i=0;i<ptStudents.length;i++){
+    (function(st){
+      var card = document.createElement("div");
+      card.style.cssText = "background:linear-gradient(145deg,var(--bg2),var(--bg3));border:1px solid var(--card-border);border-radius:11px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer";
+      card.innerHTML = "<div><div style='font-size:12px;font-weight:700;color:#E8E8F0'>"+esc(st.nome)+"</div><div style='font-size:9px;color:#555;margin-top:1px'>"+esc(st.email||"")+"</div></div><div style='font-size:18px;color:var(--accent)'>&rsaquo;</div>";
+      card.onclick = function(){ fsOpenStudent(st.uid, st.nome); };
+      el.appendChild(card);
+    })(ptStudents[i]);
+  }
+}
+
+function updPtUI(){
+  // Toggle visibility of PT/student sections based on role and login
+  var loggedIn = !!fbUser;
+  var ptSection = document.getElementById("pt-section");
+  var studentSection = document.getElementById("student-section");
+  var notLoggedNote = document.getElementById("pt-login-note");
+
+  // PT section: show only if logged in AND role is pt
+  if(ptSection) ptSection.style.display = (loggedIn && userRole==="pt") ? "block" : "none";
+  // Student section (link to a PT): show if logged in AND not a PT
+  if(studentSection) studentSection.style.display = (loggedIn && userRole!=="pt") ? "block" : "none";
+  // Login note: show if not logged in
+  if(notLoggedNote) notLoggedNote.style.display = loggedIn ? "none" : "block";
+
+  // PT code display
+  var codeEl = document.getElementById("pt-my-code");
+  if(codeEl && myPtCode) codeEl.textContent = myPtCode;
+
+  // Student's linked PT display
+  var linkStatus = document.getElementById("student-link-status");
+  var linkForm = document.getElementById("student-link-form");
+  var linkedBox = document.getElementById("student-linked-box");
+  if(linkedPT){
+    if(linkForm) linkForm.style.display = "none";
+    if(linkedBox){
+      linkedBox.style.display = "block";
+      var nm = document.getElementById("linked-pt-name");
+      if(nm) nm.textContent = linkedPT.nome;
+    }
+  } else {
+    if(linkForm) linkForm.style.display = "block";
+    if(linkedBox) linkedBox.style.display = "none";
+  }
+}
+
+
+function showPtMsg(elId, msg, isError){
+  var el = document.getElementById(elId);
+  if(el){
+    el.textContent = msg;
+    el.style.color = isError ? "#FB5C73" : "#10D9A0";
+    el.style.display = "block";
+  }
+}
+
+function closeModal(id){
+  var el = document.getElementById(id);
+  if(el) el.className = el.className.indexOf("conf-bg")>-1 ? "conf-bg" : "modal-bg";
+}
+
 function fsScheduleSave(){
   // Debounce cloud writes
   if(fbSyncTimer) clearTimeout(fbSyncTimer);
@@ -4333,10 +4985,16 @@ function updAccountUI(){
     st.innerHTML = "Conectado como <span style='color:var(--accent);font-weight:700'>"+(fbUser.email||fbUser.displayName||"usuario")+"</span><br><span style='font-size:9px;color:#10D9A0'>Dados sincronizados na nuvem</span>";
     if(lo) lo.style.display = "block";
     if(li) li.style.display = "none";
+    var bps=document.getElementById("become-pt-section");
+    if(bps) bps.style.display = (userRole!=="pt") ? "block" : "none";
   } else {
     st.innerHTML = "<span style='color:#FB923C'>Sem conta - dados apenas neste aparelho</span>";
     if(lo) lo.style.display = "none";
     if(li) li.style.display = "block";
+    var bps=document.getElementById("become-pt-section");
+    if(bps) bps.style.display = "none";
+    var pts=document.getElementById("pt-section");if(pts)pts.style.display="none";
+    var sts=document.getElementById("student-section");if(sts)sts.style.display="none";
   }
 }
 
